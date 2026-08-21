@@ -3,7 +3,7 @@ from datetime import date, datetime
 
 def print_cake(candle_count):
 	candles = "i" * candle_count
-	print(f"       ___{candles}___")
+	print(f"       ___{ candles }___")
 	print("      |:H:a:p:p:y:|")
 	print("    __|___________|__")
 	print("   |^^^^^^^^^^^^^^^^^|")
@@ -23,3 +23,5 @@ print_cake(age % 10)
 if birthdate.year % 4 == 0 and (birthdate.year % 100 != 0 or birthdate.year % 400 == 0):
 	print()
 	print_cake(age % 10)
+
+
