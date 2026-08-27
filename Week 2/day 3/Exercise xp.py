@@ -46,9 +46,6 @@ class Currency:
 # Exercise 2
 def sum_numbers(number1, number2):
     print(number1 + number2)
-
-from func import sum_numbers
-
 sum_numbers(5, 10)
 
 # Exercise 3
