@@ -1,4 +1,4 @@
-
+# Modules
 def get_page_load_time(url):
     start_time = 'time'.perf_counter()
 

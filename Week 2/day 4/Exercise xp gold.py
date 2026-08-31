@@ -35,7 +35,7 @@ TRENDING_URL = "https://api.giphy.com/v1/gifs/trending"
 
 
 def get_gifs(search_term):
-    response = request.s.get(
+    response = request.get(
         SEARCH_URL,
         params={
             "api_key": API_KEY,
@@ -52,7 +52,7 @@ def get_gifs(search_term):
 
 
 def get_trending_gifs():
-    response = requests.get(
+    response = request.get(
         TRENDING_URL,
         params={
             "api_key": API_KEY,

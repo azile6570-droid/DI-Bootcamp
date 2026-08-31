@@ -1,4 +1,4 @@
-from Anagram_checker import AnagramChecker
+from anagram_checker import AnagramChecker
 
 
 def main():

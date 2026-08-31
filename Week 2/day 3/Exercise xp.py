@@ -42,8 +42,7 @@ class Currency:
 
         return self
 
-    
-# Exercise 2
+    # Exercise 2
 def sum_numbers(number1, number2):
     print(number1 + number2)
 sum_numbers(5, 10)

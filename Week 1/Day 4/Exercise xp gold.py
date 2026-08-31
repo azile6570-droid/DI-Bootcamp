@@ -39,3 +39,34 @@ def sum_number_patterns(x):
 
 
 print(sum_number_patterns(3))
+
+# Exercise 3
+import random
+
+
+def throw_dice():
+    return random.randint(1, 6)
+
+
+def throw_until_doubles():
+    throws = 0
+
+    while True:
+        first_dice = throw_dice()
+        second_dice = throw_dice()
+        throws += 1
+
+        if first_dice == second_dice:
+            return throws
+
+
+def main():
+    results = [throw_until_doubles() for _ in range(100)]
+    total_throws = sum(results)
+    average_throws = total_throws / len(results)
+
+    print(f"Total throws: {total_throws}")
+    print(f"Average throws to reach doubles: {average_throws:.2f}")
+
+
+main()

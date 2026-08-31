@@ -108,6 +108,5 @@ GameOfLife(blinker).run(10)
 
 print("\nBlock:")
 GameOfLife(block).run(10)
-
 print("\nGlider:")
 GameOfLife(glider).run(10)
