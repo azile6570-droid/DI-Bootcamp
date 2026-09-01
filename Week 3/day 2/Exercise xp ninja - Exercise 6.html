@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exercise 6 - Calendar</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        table {
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px 12px;
+            text-align: center;
+            width: 40px;
+            height: 40px;
+        }
+        th {
+            background-color: #4CAF50;
+            color: white;
+            font-weight: bold;
+        }
+        td {
+            background-color: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+    <h1>Calendar Generator</h1>
+    <div id="calendar-container"></div>
+
+    <script>
+        function createCalendar(year, month) {
+            // Create table element
+            const table = document.createElement('table');
+            const tbody = document.createElement('tbody');
+            
+            // Add table title
+            const titleRow = document.createElement('tr');
+            const titleCell = document.createElement('th');
+            titleCell.colSpan = 7;
+            titleCell.textContent = `${year}-${String(month).padStart(2, '0')}`;
+            titleRow.appendChild(titleCell);
+            tbody.appendChild(titleRow);
+            
+            // Add weekday headers
+            const weekdayRow = document.createElement('tr');
+            const weekdays = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'];
+            weekdays.forEach(day => {
+                const th = document.createElement('th');
+                th.textContent = day;
+                weekdayRow.appendChild(th);
+            });
+            tbody.appendChild(weekdayRow);
+            
+            // Get the first day of the month and number of days
+            const firstDay = new Date(year, month - 1, 1);
+            const lastDay = new Date(year, month, 0);
+            const daysInMonth = lastDay.getDate();
+            const startingDayOfWeek = firstDay.getDay() === 0 ? 6 : firstDay.getDay() - 1; // Convert to Mon=0
+            
+            // Create calendar rows
+            let dayCounter = 1;
+            let weekRow = document.createElement('tr');
+            
+            // Add empty cells before the first day
+            for (let i = 0; i < startingDayOfWeek; i++) {
+                weekRow.appendChild(document.createElement('td'));
+            }
+            
+            // Add days of the month
+            for (let i = startingDayOfWeek; i < 7 && dayCounter <= daysInMonth; i++) {
+                const dayCell = document.createElement('td');
+                dayCell.textContent = dayCounter;
+                weekRow.appendChild(dayCell);
+                dayCounter++;
+            }
+            
+            tbody.appendChild(weekRow);
+            
+            // Continue adding weeks
+            while (dayCounter <= daysInMonth) {
+                weekRow = document.createElement('tr');
+                for (let i = 0; i < 7 && dayCounter <= daysInMonth; i++) {
+                    const dayCell = document.createElement('td');
+                    dayCell.textContent = dayCounter;
+                    weekRow.appendChild(dayCell);
+                    dayCounter++;
+                }
+                tbody.appendChild(weekRow);
+            }
+            
+            table.appendChild(tbody);
+            return table;
+        }
+
+        // Generate calendar for September 2012
+        const container = document.getElementById('calendar-container');
+        container.appendChild(createCalendar(2012, 9));
+        
+        // You can also generate other calendars:
+        // container.appendChild(createCalendar(2024, 1)); // January 2024
+        // container.appendChild(createCalendar(2024, 12)); // December 2024
+    </script>
+</body>
+</html>
