@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>DOM & Forms Exercises</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        
+        section {
+            background-color: white;
+            border: 1px solid #ddd;
+            padding: 20px;
+            margin-bottom: 30px;
+            border-radius: 5px;
+        }
+        
+        h2 {
+            color: #333;
+            border-bottom: 2px solid #4CAF50;
+            padding-bottom: 10px;
+        }
+        
+        select {
+            padding: 8px;
+            margin-right: 10px;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+        }
+        
+        input[type="text"] {
+            padding: 8px;
+            width: 250px;
+            margin-right: 10px;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+        }
+        
+        input[type="button"], button {
+            padding: 8px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 3px;
+            margin-right: 10px;
+        }
+        
+        input[type="button"]:hover, button:hover {
+            background-color: #45a049;
+        }
+        
+        #clearBtn {
+            background-color: #f44336;
+        }
+        
+        #clearBtn:hover {
+            background-color: #da190b;
+        }
+        
+        #display {
+            font-weight: bold;
+            color: #4CAF50;
+            margin-left: 10px;
+        }
+        
+        ul {
+            list-style-type: none;
+            padding: 0;
+            margin-top: 20px;
+        }
+        
+        li {
+            background-color: #f0f0f0;
+            padding: 10px;
+            margin-bottom: 5px;
+            border-left: 4px solid #4CAF50;
+            border-radius: 3px;
+        }
+        
+        form {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>DOM & Forms Exercises</h1>
+    
+    <!-- Exercise 1: Select a kind of Music -->
+    <section id="exercise1">
+        <h2>Exercise 1: Select a kind of Music</h2>
+        <select id="genres">
+            <option value="rock">Rock</option>
+            <option value="blues" selected>Blues</option>
+        </select>
+        <p>Selected: <span id="display"></span></p>
+    </section>
+    
+    <!-- Exercise 2: Delete colors -->
+    <section id="exercise2">
+        <h2>Exercise 2: Delete colors</h2>
+        <form>
+            <select id="colorSelect">
+                <option>Red</option>
+                <option>Green</option>
+                <option>White</option>
+                <option>Black</option>
+            </select>
+            <input type="button" value="Select and Remove">
+        </form>
+    </section>
+    
+    <!-- Exercise 3: Shopping List -->
+    <section id="exercise3">
+        <h2>Exercise 3: Create a shopping list</h2>
+        <div id="root"></div>
+    </section>
+
+    <script src="Exercise xp.js"></script>
+</body>
+</html>
