@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Coloring Squares - Pixel Art Studio</title>
+  <!-- Font Awesome for UI icons -->
+  <link 
+    rel="stylesheet" 
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" 
+  />
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      display: flex;
+      height: 100vh;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #1e1e2e;
+      color: #cdd6f4;
+      overflow: hidden;
+    }
+
+    /* Sidebar Layout */
+    .sidebar {
+      width: 260px;
+      background-color: #181825;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      border-right: 1px solid #313244;
+      overflow-y: auto;
+    }
+
+    h2 {
+      font-size: 1.2rem;
+      color: #cba6f7;
+      margin-bottom: 5px;
+    }
+
+    .tool-section {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .tool-section label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #a6adc8;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    /* Tool Buttons Grid */
+    .tools-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+    }
+
+    .btn {
+      padding: 10px;
+      background-color: #313244;
+      color: #cdd6f4;
+      border: 2px solid transparent;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+    }
+
+    .btn:hover {
+      background-color: #45475a;
+    }
+
+    .btn.active {
+      border-color: #cba6f7;
+      background-color: #45475a;
+      color: #cba6f7;
+    }
+
+    .btn-action {
+      background-color: #89b4fa;
+      color: #11111b;
+    }
+
+    .btn-action:hover {
+      background-color: #b4befe;
+    }
+
+    .btn-danger {
+      background-color: #f38ba8;
+      color: #11111b;
+    }
+
+    .btn-danger:hover {
+      background-color: #f5e0dc;
+    }
+
+    /* Custom Color Picker input */
+    .color-picker-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background-color: #313244;
+      padding: 8px 12px;
+      border-radius: 6px;
+    }
+
+    input[type="color"] {
+      -webkit-appearance: none;
+      border: none;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      cursor: pointer;
+      background: none;
+    }
+
+    input[type="color"]::-webkit-color-swatch-wrapper {
+      padding: 0;
+    }
+
+    input[type="color"]::-webkit-color-swatch {
+      border: 2px solid #585b70;
+      border-radius: 50%;
+    }
+
+    /* Color Palette CSS Grid */
+    .color-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+    }
+
+    .color-box {
+      width: 100%;
+      aspect-ratio: 1;
+      border-radius: 6px;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: transform 0.15s ease, border-color 0.15s ease;
+    }
+
+    .color-box:hover {
+      transform: scale(1.1);
+    }
+
+    .color-box.selected {
+      border-color: #ffffff;
+      transform: scale(1.05);
+      box-shadow: 0 0 8px rgba(255, 255, 255, 0.4);
+    }
+
+    /* Main Area / Drawing Board */
+    .main-content {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      background-color: #1e1e2e;
+    }
+
+    .canvas-grid {
+      display: grid;
+      background-color: #ffffff;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      border-radius: 4px;
+      overflow: hidden;
+      max-width: 90vw;
+      max-height: 85vh;
+    }
+
+    .square {
+      border: 1px solid #f0f0f0;
+      user-select: none;
+      background-color: #ffffff;
+    }
+
+    .square:hover {
+      opacity: 0.85;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Controls Sidebar -->
+  <div class="sidebar">
+    <h2>Coloring Game</h2>
+
+    <!-- Tools -->
+    <div class="tool-section">
+      <label>Tools</label>
+      <div class="tools-grid">
+        <button id="brush-btn" class="btn active"><i class="fa-solid fa-paintbrush"></i> Brush</button>
+        <button id="fill-btn" class="btn"><i class="fa-solid fa-fill-drip"></i> Bucket</button>
+        <button id="eraser-btn" class="btn"><i class="fa-solid fa-eraser"></i> Eraser</button>
+        <button id="clear-btn" class="btn btn-danger"><i class="fa-solid fa-trash"></i> Clear</button>
+      </div>
+    </div>
+
+    <!-- Color Selection -->
+    <div class="tool-section">
+      <label>Active Color</label>
+      <div class="color-picker-wrapper">
+        <input type="color" id="custom-color-picker" value="#FF0000" />
+        <span id="color-hex-text">#FF0000</span>
+      </div>
+    </div>
+
+    <div class="tool-section">
+      <label>Palette</label>
+      <div id="palette" class="color-grid"></div>
+    </div>
+
+    <!-- Canvas Options -->
+    <div class="tool-section">
+      <label>Export</label>
+      <button id="download-btn" class="btn btn-action"><i class="fa-solid fa-download"></i> Save Artwork</button>
+    </div>
+  </div>
+
+  <!-- Main Canvas Content -->
+  <div class="main-content">
+    <div id="canvas" class="canvas-grid"></div>
+  </div>
+
+  <script>
+    // Configuration Settings
+    const COLS = 32;
+    const ROWS = 24;
+    const SQUARE_SIZE = 22; // In Pixels
+
+    // Color Palette presets
+    const colors = [
+      "#FF0000", "#FF4500", "#FFA500", "#FFFF00",
+      "#9ACD32", "#008000", "#00FFFF", "#0000FF",
+      "#8A2BE2", "#FF00FF", "#FF1493", "#A52A2A",
+      "#808080", "#000000", "#FFFFFF", "#F4A460"
+    ];
+
+    let currentColor = colors[0];
+    let currentMode = 'brush'; // 'brush', 'fill', 'eraser'
+    let isMouseDown = false;
+
+    // Element References
+    const palette = document.getElementById("palette");
+    const canvas = document.getElementById("canvas");
+    const customColorPicker = document.getElementById("custom-color-picker");
+    const colorHexText = document.getElementById("color-hex-text");
+
+    const brushBtn = document.getElementById("brush-btn");
+    const fillBtn = document.getElementById("fill-btn");
+    const eraserBtn = document.getElementById("eraser-btn");
+    const clearBtn = document.getElementById("clear-btn");
+    const downloadBtn = document.getElementById("download-btn");
+
+    // Initialize Canvas Dimensions with CSS Grid
+    canvas.style.gridTemplateColumns = `repeat(${COLS}, ${SQUARE_SIZE}px)`;
+    canvas.style.gridTemplateRows = `repeat(${ROWS}, ${SQUARE_SIZE}px)`;
+
+    // 1. Build Color Palette Grid
+    colors.forEach((color, index) => {
+      const colorBox = document.createElement("div");
+      colorBox.classList.add("color-box");
+      colorBox.style.backgroundColor = color;
+
+      if (index === 0) colorBox.classList.add("selected");
+
+      colorBox.addEventListener("click", () => {
+        selectColor(color);
+        updateActiveColorUI(colorBox);
+      });
+
+      palette.appendChild(colorBox);
+    });
+
+    // Helper: Select Color & Switch Mode
+    function selectColor(color) {
+      currentColor = color;
+      customColorPicker.value = rgbToHex(color);
+      colorHexText.textContent = currentColor.toUpperCase();
+      if (currentMode === 'eraser') switchTool('brush');
+    }
+
+    function updateActiveColorUI(targetBox) {
+      document.querySelectorAll(".color-box").forEach(box => box.classList.remove("selected"));
+      if (targetBox) targetBox.classList.add("selected");
+    }
+
+    // Custom Color Input Listener
+    customColorPicker.addEventListener("input", (e) => {
+      currentColor = e.target.value;
+      colorHexText.textContent = currentColor.toUpperCase();
+      document.querySelectorAll(".color-box").forEach(box => box.classList.remove("selected"));
+      if (currentMode === 'eraser') switchTool('brush');
+    });
+
+    // 2. Build Canvas Squares Grid
+    for (let row = 0; row < ROWS; row++) {
+      for (let col = 0; col < COLS; col++) {
+        const square = document.createElement("div");
+        square.classList.add("square");
+        square.dataset.row = row;
+        square.dataset.col = col;
+
+        // Click interaction
+        square.addEventListener("mousedown", () => handleSquareClick(square));
+
+        // Drag-drawing interaction
+        square.addEventListener("mouseover", () => {
+          if (isMouseDown && currentMode !== 'fill') {
+            applyColor(square);
+          }
+        });
+
+        canvas.appendChild(square);
+      }
+    }
+
+    // Global Mouse Listener for Drag State
+    document.body.addEventListener("mousedown", () => isMouseDown = true);
+    document.body.addEventListener("mouseup", () => isMouseDown = false);
+
+    // 3. Handle Tool Interaction Logic
+    function handleSquareClick(square) {
+      if (currentMode === 'fill') {
+        const targetColor = square.style.backgroundColor || "rgb(255, 255, 255)";
+        floodFill(parseInt(square.dataset.row), parseInt(square.dataset.col), targetColor, currentColor);
+      } else {
+        applyColor(square);
+      }
+    }
+
+    function applyColor(square) {
+      if (currentMode === 'eraser') {
+        square.style.backgroundColor = '#ffffff';
+      } else {
+        square.style.backgroundColor = currentColor;
+      }
+    }
+
+    // 4. Flood Fill (Bucket Tool) Algorithm
+    function floodFill(startRow, startCol, targetColor, replacementColor) {
+      const startSquare = getSquare(startRow, startCol);
+      const startBg = startSquare ? (startSquare.style.backgroundColor || "rgb(255, 255, 255)") : "";
+
+      // Normalize comparison color
+      const tempDiv = document.createElement("div");
+      tempDiv.style.backgroundColor = replacementColor;
+      document.body.appendChild(tempDiv);
+      const normalizedReplacement = tempDiv.style.backgroundColor;
+      document.body.removeChild(tempDiv);
+
+      if (startBg === normalizedReplacement) return;
+
+      const queue = [[startRow, startCol]];
+      const visited = new Set();
+
+      while (queue.length > 0) {
+        const [r, c] = queue.shift();
+        const key = `${r},${c}`;
+
+        if (r < 0 || r >= ROWS || c < 0 || c >= COLS) continue;
+        if (visited.has(key)) continue;
+        visited.add(key);
+
+        const currentSquare = getSquare(r, c);
+        const currentBg = currentSquare.style.backgroundColor || "rgb(255, 255, 255)";
+
+        if (currentBg === startBg) {
+          currentSquare.style.backgroundColor = replacementColor;
+
+          queue.push([r + 1, c]);
+          queue.push([r - 1, c]);
+          queue.push([r, c + 1]);
+          queue.push([r, c - 1]);
+        }
+      }
+    }
+
+    function getSquare(row, col) {
+      return canvas.querySelector(`[data-row="${row}"][data-col="${col}"]`);
+    }
+
+    // 5. Tool Switching Logic
+    function switchTool(tool) {
+      currentMode = tool;
+      [brushBtn, fillBtn, eraserBtn].forEach(btn => btn.classList.remove("active"));
+
+      if (tool === 'brush') brushBtn.classList.add("active");
+      if (tool === 'fill') fillBtn.classList.add("active");
+      if (tool === 'eraser') eraserBtn.classList.add("active");
+    }
+
+    brushBtn.addEventListener("click", () => switchTool('brush'));
+    fillBtn.addEventListener("click", () => switchTool('fill'));
+    eraserBtn.addEventListener("click", () => switchTool('eraser'));
+
+    // Clear Canvas
+    clearBtn.addEventListener("click", () => {
+      document.querySelectorAll(".square").forEach(square => {
+        square.style.backgroundColor = "#ffffff";
+      });
+    });
+
+    // 6. Download Artwork as PNG Image
+    downloadBtn.addEventListener("click", () => {
+      const exportCanvas = document.createElement("canvas");
+      exportCanvas.width = COLS * SQUARE_SIZE;
+      exportCanvas.height = ROWS * SQUARE_SIZE;
+      const ctx = exportCanvas.getContext("2d");
+
+      document.querySelectorAll(".square").forEach(square => {
+        const r = parseInt(square.dataset.row);
+        const c = parseInt(square.dataset.col);
+        ctx.fillStyle = square.style.backgroundColor || "#ffffff";
+        ctx.fillRect(c * SQUARE_SIZE, r * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE);
+      });
+
+      const link = document.createElement("a");
+      link.download = "pixel-artwork.png";
+      link.href = exportCanvas.toDataURL("image/png");
+      link.click();
+    });
+
+    // Helper function: Convert Color to Hex
+    function rgbToHex(col) {
+      if (col.startsWith('#')) return col;
+      const ctx = document.createElement('canvas').getContext('2d');
+      ctx.fillStyle = col;
+      return ctx.fillStyle;
+    }
+  </script>
+</body>
+</html>

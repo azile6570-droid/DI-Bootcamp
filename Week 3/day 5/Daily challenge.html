@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Interactive Todo List</title>
+  <!-- Font Awesome for icons -->
+  <link 
+    rel="stylesheet" 
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" 
+  />
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding-top: 60px;
+    }
+
+    .container {
+      background: #ffffff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+      width: 100%;
+      max-width: 480px;
+      transition: all 0.3s ease;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 24px;
+      color: #333333;
+      font-size: 1.8rem;
+    }
+
+    form {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    input[type="text"] {
+      flex: 1;
+      padding: 12px 15px;
+      border: 2px solid #e0e0e0;
+      border-radius: 6px;
+      font-size: 15px;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    input[type="text"]:focus {
+      border-color: #667eea;
+      box-shadow: 0 0 5px rgba(102, 126, 234, 0.3);
+    }
+
+    button {
+      padding: 12px 20px;
+      background-color: #667eea;
+      color: #ffffff;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 15px;
+      transition: background-color 0.2s, transform 0.1s;
+    }
+
+    button:hover {
+      background-color: #5a67d8;
+    }
+
+    button:active {
+      transform: scale(0.97);
+    }
+
+    /* Interactive Stats Bar */
+    .task-stats {
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      color: #718096;
+      margin-bottom: 15px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #edf2f7;
+    }
+
+    .listTasks {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    /* Task Item Styling & Animations */
+    .task-item {
+      display: flex;
+      align-items: center;
+      padding: 12px 15px;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      gap: 12px;
+      transition: all 0.25s ease;
+      animation: slideIn 0.3s ease forwards;
+    }
+
+    .task-item:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      border-color: #cbd5e1;
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .task-item.fade-out {
+      animation: fadeOut 0.25s ease forwards;
+    }
+
+    @keyframes fadeOut {
+      to {
+        opacity: 0;
+        transform: translateX(20px);
+      }
+    }
+
+    /* Font Awesome X Button */
+    .delete-btn {
+      color: #a0aec0;
+      cursor: pointer;
+      font-size: 16px;
+      padding: 4px;
+      transition: color 0.2s, transform 0.2s;
+    }
+
+    .delete-btn:hover {
+      color: #e53e3e;
+      transform: scale(1.2);
+    }
+
+    /* Checkbox styling */
+    input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
+      accent-color: #667eea;
+    }
+
+    .task-label {
+      color: #2d3748;
+      cursor: pointer;
+      font-size: 15px;
+      flex: 1;
+      word-break: break-word;
+      transition: color 0.2s, text-decoration 0.2s;
+    }
+
+    /* Completed Task State (Bonus I) */
+    .task-item.is-done {
+      background: #fff5f5;
+      border-color: #fed7d7;
+    }
+
+    .task-item.is-done .task-label {
+      color: #e53e3e;
+      text-decoration: line-through;
+    }
+
+    /* Empty State */
+    .empty-message {
+      text-align: center;
+      color: #a0aec0;
+      font-style: italic;
+      padding: 20px 0;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1><i class="fa-solid fa-list-check"></i> Todo List</h1>
+    
+    <form id="task-form">
+      <input type="text" id="task-input" placeholder="What needs to be done?" autocomplete="off" />
+      <button type="submit">Add Task</button>
+    </form>
+
+    <div class="task-stats">
+      <span id="task-count">0 tasks total</span>
+      <span id="completed-count">0 completed</span>
+    </div>
+
+    <div class="listTasks"></div>
+  </div>
+
+  <script>
+    // Tasks array and ID counter (Bonus I)
+    const tasks = [];
+    let idCounter = 0;
+
+    const taskForm = document.getElementById("task-form");
+    const taskInput = document.getElementById("task-input");
+    const listTasks = document.querySelector(".listTasks");
+    const taskCountEl = document.getElementById("task-count");
+    const completedCountEl = document.getElementById("completed-count");
+
+    // Handle form submit
+    taskForm.addEventListener("submit", function (event) {
+      event.preventDefault();
+      addTask();
+    });
+
+    // Add Task Function
+    function addTask() {
+      const text = taskInput.value.trim();
+
+      if (text === "") {
+        // Subtle input flash animation when empty
+        taskInput.style.borderColor = "#e53e3e";
+        setTimeout(() => taskInput.style.borderColor = "#e0e0e0", 1000);
+        return;
+      }
+
+      // Create task object (Bonus I)
+      const taskObj = {
+        task_id: idCounter,
+        text: text,
+        done: false
+      };
+
+      tasks.push(taskObj);
+
+      // Render the task into the DOM
+      renderTask(taskObj);
+
+      idCounter++;
+      taskInput.value = "";
+      updateStats();
+    }
+
+    // Render individual task to the DOM
+    function renderTask(taskObj) {
+      // Clear empty state placeholder if present
+      const emptyMsg = listTasks.querySelector(".empty-message");
+      if (emptyMsg) emptyMsg.remove();
+
+      const taskDiv = document.createElement("div");
+      taskDiv.classList.add("task-item");
+      taskDiv.setAttribute("data-task-id", taskObj.task_id);
+
+      // 1. "X" button (Bonus II)
+      const deleteBtn = document.createElement("i");
+      deleteBtn.classList.add("fa-solid", "fa-xmark", "delete-btn");
+      deleteBtn.title = "Delete Task";
+      deleteBtn.addEventListener("click", () => deleteTask(taskObj.task_id));
+
+      // 2. Checkbox input (Bonus I)
+      const checkbox = document.createElement("input");
+      checkbox.type = "checkbox";
+      checkbox.checked = taskObj.done;
+      checkbox.addEventListener("change", () => doneTask(taskObj.task_id));
+
+      // 3. Label text
+      const label = document.createElement("label");
+      label.classList.add("task-label");
+      label.textContent = taskObj.text;
+      
+      // Allow clicking text to toggle checkbox
+      label.addEventListener("click", () => {
+        checkbox.checked = !checkbox.checked;
+        doneTask(taskObj.task_id);
+      });
+
+      // Append left to right: X icon, Checkbox, Label
+      taskDiv.appendChild(deleteBtn);
+      taskDiv.appendChild(checkbox);
+      taskDiv.appendChild(label);
+
+      listTasks.appendChild(taskDiv);
+    }
+
+    // Bonus I: Toggle task done/undone
+    function doneTask(id) {
+      const taskObj = tasks.find(t => t.task_id === id);
+      if (taskObj) {
+        taskObj.done = !taskObj.done;
+      }
+
+      const taskDiv = document.querySelector(`[data-task-id="${id}"]`);
+      if (taskDiv && taskObj) {
+        taskDiv.classList.toggle("is-done", taskObj.done);
+      }
+
+      updateStats();
+    }
+
+    // Bonus II: Delete task with exit animation
+    function deleteTask(id) {
+      const taskDiv = document.querySelector(`[data-task-id="${id}"]`);
+      
+      if (taskDiv) {
+        // Trigger exit animation before removal
+        taskDiv.classList.add("fade-out");
+        
+        taskDiv.addEventListener("animationend", () => {
+          // Remove from tasks array
+          const index = tasks.findIndex(t => t.task_id === id);
+          if (index !== -1) {
+            tasks.splice(index, 1);
+          }
+
+          // Remove from DOM
+          taskDiv.remove();
+          updateStats();
+        });
+      }
+    }
+
+    // Interactive Stats Tracker
+    function updateStats() {
+      const total = tasks.length;
+      const completed = tasks.filter(t => t.done).length;
+
+      taskCountEl.textContent = `${total} ${total === 1 ? 'task' : 'tasks'} total`;
+      completedCountEl.textContent = `${completed} completed`;
+
+      if (total === 0) {
+        listTasks.innerHTML = `<p class="empty-message">No tasks added yet!</p>`;
+      }
+    }
+
+    // Initialize stats display
+    updateStats();
+  </script>
+</body>
+</html>

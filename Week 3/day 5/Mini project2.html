@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JS Drumkit</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #111827 0%, #1f2937 100%);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      color: #ffffff;
+      padding: 20px;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      text-shadow: 0 0 10px rgba(236, 72, 153, 0.5);
+    }
+
+    p.instructions {
+      color: #9ca3af;
+      margin-bottom: 40px;
+      font-size: 1.1rem;
+    }
+
+    /* Drum Pads Container */
+    .keys {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      justify-content: center;
+      max-width: 900px;
+    }
+
+    /* Individual Drum Key Styling */
+    .key {
+      background: rgba(31, 41, 55, 0.8);
+      border: 3px solid #374151;
+      border-radius: 12px;
+      padding: 20px 25px;
+      min-width: 100px;
+      text-align: center;
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.07s ease;
+      box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    .key kbd {
+      display: block;
+      font-size: 2.5rem;
+      font-weight: bold;
+      color: #f3f4f6;
+      text-transform: uppercase;
+    }
+
+    .key .sound {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #ec4899;
+      margin-top: 5px;
+      font-weight: 600;
+    }
+
+    /* Active Animation Effect */
+    .key.playing {
+      transform: scale(1.1);
+      border-color: #ec4899;
+      box-shadow: 0 0 25px #ec4899;
+      background: rgba(236, 72, 153, 0.2);
+    }
+  </style>
+</head>
+<body>
+
+  <h1>JS Drumkit</h1>
+  <p class="instructions">Press a key or click a drum pad to play</p>
+
+  <div class="keys">
+    <div data-key="65" class="key">
+      <kbd>A</kbd>
+      <span class="sound">Clap</span>
+    </div>
+    <div data-key="83" class="key">
+      <kbd>S</kbd>
+      <span class="sound">Hi-Hat</span>
+    </div>
+    <div data-key="68" class="key">
+      <kbd>D</kbd>
+      <span class="sound">Kick</span>
+    </div>
+    <div data-key="70" class="key">
+      <kbd>F</kbd>
+      <span class="sound">Openhat</span>
+    </div>
+    <div data-key="71" class="key">
+      <kbd>G</kbd>
+      <span class="sound">Boom</span>
+    </div>
+    <div data-key="72" class="key">
+      <kbd>H</kbd>
+      <span class="sound">Ride</span>
+    </div>
+    <div data-key="74" class="key">
+      <kbd>J</kbd>
+      <span class="sound">Snare</span>
+    </div>
+    <div data-key="75" class="key">
+      <kbd>K</kbd>
+      <span class="sound">Tom</span>
+    </div>
+    <div data-key="76" class="key">
+      <kbd>L</kbd>
+      <span class="sound">Tink</span>
+    </div>
+  </div>
+
+  <script>
+    // Web Audio Synthesizer (Ensures sound plays without needing local audio files)
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+    function playSynthSound(soundType) {
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+
+      const now = audioCtx.currentTime;
+
+      switch(soundType) {
+        case 'kick':
+        case 'boom':
+          osc.frequency.setValueAtTime(150, now);
+          osc.frequency.exponentialRampToValueAtTime(0.01, now + 0.5);
+          gain.gain.setValueAtTime(1, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.5);
+          osc.start(now);
+          osc.stop(now + 0.5);
+          break;
+        case 'snare':
+        case 'clap':
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(250, now);
+          gain.gain.setValueAtTime(0.8, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.2);
+          osc.start(now);
+          osc.stop(now + 0.2);
+          break;
+        case 'hi-hat':
+        case 'openhat':
+        case 'tink':
+          osc.type = 'square';
+          osc.frequency.setValueAtTime(800, now);
+          gain.gain.setValueAtTime(0.3, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.1);
+          osc.start(now);
+          osc.stop(now + 0.1);
+          break;
+        default: // Tom / Ride
+          osc.frequency.setValueAtTime(300, now);
+          osc.frequency.exponentialRampToValueAtTime(50, now + 0.3);
+          gain.gain.setValueAtTime(0.7, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+          osc.start(now);
+          osc.stop(now + 0.3);
+      }
+    }
+
+    // Play Sound and trigger visual glow animation
+    function playSoundByKeyCode(keyCode) {
+      const keyElement = document.querySelector(`.key[data-key="${keyCode}"]`);
+      if (!keyElement) return;
+
+      const soundName = keyElement.querySelector('.sound').textContent.toLowerCase();
+
+      // Trigger synthesized audio
+      playSynthSound(soundName);
+
+      // Add playing animation class
+      keyElement.classList.add('playing');
+    }
+
+    // Remove CSS transition effect
+    function removeTransition(e) {
+      if (e.propertyName !== 'transform') return;
+      this.classList.remove('playing');
+    }
+
+    // 1. Keyboard Listener
+    window.addEventListener('keydown', (e) => {
+      // e.keyCode gets the ASCII code of the key pressed
+      playSoundByKeyCode(e.keyCode);
+    });
+
+    // 2. Mouse Click Listener
+    const keys = document.querySelectorAll('.key');
+    keys.forEach(key => {
+      // Trigger sound on click
+      key.addEventListener('click', function() {
+        const keyCode = this.getAttribute('data-key');
+        playSoundByKeyCode(keyCode);
+      });
+
+      // Transition end listener to reset glow
+      key.addEventListener('transitionend', removeTransition);
+    });
+  </script>
+</body>
+</html>
