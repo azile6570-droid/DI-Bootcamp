@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Submitted Data</title>
+</head>
+<body>
+
+  <h1>Form Data Received</h1>
+  <section id="output-section"></section>
+
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const firstName = urlParams.get('name');
+    const lastName = urlParams.get('lastname');
+    const section = document.getElementById('output-section');
+    if (firstName && lastName) {
+      section.textContent = `Hello, ${firstName} ${lastName}! Your form was successfully submitted.`;
+    } else {
+      section.textContent = 'No form data received.';
+    }
+  </script>
+
+</body>
+</html>

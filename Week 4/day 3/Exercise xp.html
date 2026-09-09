@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Exercises XP - HTTP, Forms & JSON</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 600px;
+      margin: 20px auto;
+      padding: 0 20px;
+    }
+    form {
+      border: 1px solid #ccc;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 30px;
+    }
+    .form-group {
+      margin-bottom: 15px;
+    }
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+    input[type="text"], textarea {
+      width: 100%;
+      padding: 8px;
+      box-sizing: border-box;
+    }
+    input[type="submit"] {
+      padding: 8px 16px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- EXERCISE 1-->
+   <form action="" method="GET">
+    <div class="form-group">
+      <label for="name-get">Name:</label>
+      <input type="text" id="name-get" name="name">
+    </div>
+    <div class="form-group">
+      <label for="message-get">Message:</label>
+      <textarea id="message-get" name="message" rows="4"></textarea>
+    </div>
+    <input type="submit" value="Send">
+  </form>
+
+  <!-- EXERCISE 2-->
+  
+  <form action="" method="POST">
+    <div class="form-group">
+      <label for="name-post">Name:</label>
+      <input type="text" id="name-post" name="name">
+    </div>
+    <div class="form-group">
+      <label for="message-post">Message:</label>
+      <textarea id="message-post" name="message" rows="4"></textarea>
+    </div>
+    <input type="submit" value="Send">
+  </form>
+
+  <!-- EXERCISE 3 -->
+  <script>
+    const marioGame = {
+      detail: "An amazing game!",
+      characters: {
+        mario: {
+          description: "Small and jumpy. Likes princesses.",
+          height: 10,
+          weight: 3,
+          speed: 12,
+        },
+        bowser: {
+          description: "Big and green, Hates princesses.",
+          height: 16,
+          weight: 6,
+          speed: 4,
+        },
+        princessPeach: {
+          description: "Beautiful princess.",
+          height: 12,
+          weight: 2,
+          speed: 2,
+        }
+      },
+    };
+const marioJSON = JSON.stringify(marioGame);
+    console.log("Standard JSON String:", marioJSON);
+
+    
+    const marioJSONPretty = JSON.stringify(marioGame, null, 2);
+    console.log("Pretty Printed JSON String:\n", marioJSONPretty);
+    debugger; 
+    console.log("Check the values of marioJSON and marioJSONPretty in the Sources/Debugger tab.");
+  </script>
+
+</body>
+</html>

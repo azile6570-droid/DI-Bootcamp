@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Daily Challenge: HTML Form</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    form {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    input[type="text"] {
+      padding: 6px;
+    }
+    button {
+      padding: 6px 12px;
+      cursor: pointer;
+    }
+    #output {
+      font-family: monospace;
+      padding: 10px;
+      background-color: #f4f4f4;
+      border: 1px solid #ccc;
+      display: inline-block;
+    }
+  </style>
+</head>
+<body>
+
+  <form id="user-form">
+    <input type="text" id="name" placeholder="John" required>
+    <input type="text" id="lastname" placeholder="Doe" required>
+    <button type="submit">Send</button>
+  </form>
+
+  <div id="output"></div>
+
+  <script>
+    const form = document.getElementById('user-form');
+    const outputDiv = document.getElementById('output');
+
+    form.addEventListener('submit', function(event) {
+      event.preventDefault();
+
+      const firstName = document.getElementById('name').value.trim();
+      const lastName = document.getElementById('lastname').value.trim();
+
+      const formData = {
+        name: firstName,
+        lastname: lastName
+      };
+
+      outputDiv.textContent = JSON.stringify(formData);
+    });
+  </script>
+
+</body>
+</html>

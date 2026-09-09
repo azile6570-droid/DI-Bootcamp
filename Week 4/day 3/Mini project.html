@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Random Quote Generator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 700px;
+      margin: 30px auto;
+      padding: 20px;
+      background-color: #f4f6f8;
+      color: #333;
+    }
+    h1, h3 {
+      text-align: center;
+    }
+    section, form, div.box {
+      background: #fff;
+      margin-bottom: 25px;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .quote-box {
+      font-size: 1.2em;
+      text-align: center;
+      min-height: 80px;
+    }
+    .button-group {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    button {
+      padding: 8px 14px;
+      border: none;
+      background-color: #007bff;
+      color: white;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.9em;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    input[type="text"] {
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+    .form-group {
+      margin-bottom: 12px;
+    }
+    .form-group label {
+      display: block;
+      margin-bottom: 4px;
+      font-weight: bold;
+    }
+    .form-group input {
+      width: 100%;
+    }
+    #info-output {
+      font-weight: bold;
+      text-align: center;
+      color: #28a745;
+      margin-top: 10px;
+    }
+    .nav-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-top: 15px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Random Quote Generator</h1>
+
+  <!-- Part 1: Display Section & Generate Button -->
+  <div style="text-align: center; margin-bottom: 15px;">
+    <button id="generate-btn" style="font-size: 1em; padding: 10px 20px;">Generate Quote</button>
+  </div>
+
+  <section id="quote-section" class="quote-box">
+    <p>Click <strong>"Generate Quote"</strong> to display a quote.</p>
+  </section>
+
+  <!-- Part 2: Quote Info & Like Buttons -->
+  <div class="box">
+    <div class="button-group">
+      <button id="btn-char-with-spaces">Characters (with spaces)</button>
+      <button id="btn-char-no-spaces">Characters (no spaces)</button>
+      <button id="btn-word-count">Word Count</button>
+      <button id="btn-like">Like (<span id="like-count">0</span>)</button>
+    </div>
+    <p id="info-output"></p>
+  </div>
+
+  <!-- Part 2: Add New Quote Form -->
+  <form id="add-quote-form">
+    <h3>Add a New Quote</h3>
+    <div class="form-group">
+      <label for="new-quote">Quote:</label>
+      <input type="text" id="new-quote" placeholder="Enter quote text" required>
+    </div>
+    <div class="form-group">
+      <label for="new-author">Author:</label>
+      <input type="text" id="new-author" placeholder="Enter author name" required>
+    </div>
+    <button type="submit">Add Quote</button>
+  </form>
+
+  <!-- Part 3: Author Filter Form & Navigation -->
+  <form id="filter-form">
+    <h3>Filter Quotes by Author</h3>
+    <div class="form-group" style="display: flex; gap: 10px;">
+      <input type="text" id="filter-author" placeholder="Enter author name..." required style="flex: 1;">
+      <button type="submit">Search</button>
+    </div>
+    <div id="filter-navigation" class="nav-buttons" style="display: none;">
+      <button type="button" id="prev-btn">Previous</button>
+      <button type="button" id="next-btn">Next</button>
+    </div>
+  </form>
+
+  <!-- JavaScript -->
+  <script>
+    // Part 1    
+     const quotes = [
+      { id: 0, author: "Thomas Edison", quote: "Genius is one percent inspiration and ninety-nine percent perspiration.", likes: 0 },
+      { id: 1, author: "Albert Einstein", quote: "Life is like riding a bicycle. To keep your balance, you must keep moving.", likes: 0 },
+      { id: 2, author: "Oscar Wilde", quote: "Be yourself; everyone else is already taken.", likes: 0 },
+      { id: 3, author: "Albert Einstein", quote: "Strive not to be a success, but rather to be of value.", likes: 0 }
+    ];
+
+    let lastQuoteId = null;
+    let currentDisplayedQuote = null;
+
+    const quoteSection = document.getElementById("quote-section");
+    const generateBtn = document.getElementById("generate-btn");
+    const infoOutput = document.getElementById("info-output");
+    const likeCountSpan = document.getElementById("like-count");
+
+    function displayQuote(quoteObj) {
+      currentDisplayedQuote = quoteObj;
+      quoteSection.innerHTML = `
+        <p>"${quoteObj.quote}"</p>
+        <p><strong>— ${quoteObj.author}</strong></p>
+      `;
+      likeCountSpan.textContent = quoteObj.likes || 0;
+      infoOutput.textContent = "";
+    }
+
+    generateBtn.addEventListener("click", () => {
+      if (quotes.length === 0) return;
+      if (quotes.length === 1) {
+        displayQuote(quotes[0]);
+        return;
+      }
+
+      let randomIndex;
+      do {
+        randomIndex = Math.floor(Math.random() * quotes.length);
+      } while (quotes[randomIndex].id === lastQuoteId);
+
+      lastQuoteId = quotes[randomIndex].id;
+      displayQuote(quotes[randomIndex]);
+    });
+
+    // Part 2
+
+    const addQuoteForm = document.getElementById("add-quote-form");
+    addQuoteForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      
+      const quoteInput = document.getElementById("new-quote").value.trim();
+      const authorInput = document.getElementById("new-author").value.trim();
+
+      if (!quoteInput || !authorInput) return;
+
+      const newQuoteObj = {
+        id: quotes.length, 
+        author: authorInput,
+        quote: quoteInput,
+        likes: 0
+      };
+
+      quotes.push(newQuoteObj);
+      alert("New quote successfully added!");
+      addQuoteForm.reset();
+    });
+
+    document.getElementById("btn-char-with-spaces").addEventListener("click", () => {
+      if (!currentDisplayedQuote) return;
+      infoOutput.textContent = `Characters (with spaces): ${currentDisplayedQuote.quote.length}`;
+    });
+
+    document.getElementById("btn-char-no-spaces").addEventListener("click", () => {
+      if (!currentDisplayedQuote) return;
+      const count = currentDisplayedQuote.quote.replace(/\s+/g, "").length;
+      infoOutput.textContent = `Characters (no spaces): ${count}`;
+    });
+
+    document.getElementById("btn-word-count").addEventListener("click", () => {
+      if (!currentDisplayedQuote) return;
+      const wordCount = currentDisplayedQuote.quote.trim().split(/\s+/).length;
+      infoOutput.textContent = `Word Count: ${wordCount}`;
+    });
+
+    document.getElementById("btn-like").addEventListener("click", () => {
+      if (!currentDisplayedQuote) return;
+      currentDisplayedQuote.likes = (currentDisplayedQuote.likes || 0) + 1;
+      likeCountSpan.textContent = currentDisplayedQuote.likes;
+    });
+
+    // Part 3
+    let filteredQuotes = [];
+    let currentFilterIndex = 0;
+
+    const filterForm = document.getElementById("filter-form");
+    const filterNav = document.getElementById("filter-navigation");
+
+    filterForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const searchAuthor = document.getElementById("filter-author").value.trim().toLowerCase();
+
+      filteredQuotes = quotes.filter(q => q.author.toLowerCase().includes(searchAuthor));
+
+      if (filteredQuotes.length === 0) {
+        alert("No quotes found for that author.");
+        filterNav.style.display = "none";
+        return;
+      }
+
+      currentFilterIndex = 0;
+      displayQuote(filteredQuotes[currentFilterIndex]);
+
+      filterNav.style.display = filteredQuotes.length > 1 ? "flex" : "none";
+    });
+
+    document.getElementById("prev-btn").addEventListener("click", () => {
+      if (filteredQuotes.length === 0) return;
+      currentFilterIndex = (currentFilterIndex - 1 + filteredQuotes.length) % filteredQuotes.length;
+      displayQuote(filteredQuotes[currentFilterIndex]);
+    });
+
+    document.getElementById("next-btn").addEventListener("click", () => {
+      if (filteredQuotes.length === 0) return;
+      currentFilterIndex = (currentFilterIndex + 1) % filteredQuotes.length;
+      displayQuote(filteredQuotes[currentFilterIndex]);
+    });
+  </script>
+
+</body>
+</html>
