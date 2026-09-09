@@ -13,7 +13,7 @@ const { name, location: { country, city, coordinates: [lat, lng] } } = person;
 console.log(`I am ${name} from ${city}, ${country}. Latitude(${lat}), Longitude(${lng})`);
 
 
-// Exercise 2
+//  Exercise 2
 function displayStudentInfo({ first, last }) {
   return `Your full name is ${first} ${last}`;
 }
@@ -27,6 +27,7 @@ const usersArray = Object.entries(users);
 console.log(usersArray); 
 const updatedUsersArray = usersArray.map(([user, id]) => [user, id * 2]);
 console.log(updatedUsersArray); 
+
 
 
 // Exercise 4
@@ -56,10 +57,8 @@ class Labrador extends Dog {
 
 
 //  Exercise 6
-console.log('[2] === [2]'); 
-console.log('{} === {}, {} === {}');
-
-// 2. Reference explanation:
+console.log([2] === [2]); 
+console.log({} === {});
 const object1 = { number: 5 };
 const object2 = object1; 
 const object3 = object2;
