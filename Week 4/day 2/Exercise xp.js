@@ -57,8 +57,6 @@ class Labrador extends Dog {
 
 
 //  Exercise 6
-console.log([2] === [2]); 
-console.log({} === {});
 const object1 = { number: 5 };
 const object2 = object1; 
 const object3 = object2;

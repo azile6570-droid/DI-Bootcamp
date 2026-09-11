@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sunrise Times Comparator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 30px;
+      line-height: 1.6;
+    }
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      max-width: 450px;
+      padding: 20px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      background-color: #f9f9f9;
+    }
+    .city-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    input {
+      padding: 8px;
+      font-size: 14px;
+    }
+    button {
+      padding: 10px;
+      font-size: 16px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    #results {
+      margin-top: 20px;
+      font-size: 18px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Compare Sunrise Times</h1>
+
+  <form id="sunrise-form">
+    <div class="city-group">
+      <h3>City 1</h3>
+      <input type="number" step="any" id="lat1" placeholder="Latitude (e.g. 48.864716)" value="48.864716" required>
+      <input type="number" step="any" id="lng1" placeholder="Longitude (e.g. 2.349014)" value="2.349014" required>
+    </div>
+
+    <div class="city-group">
+      <h3>City 2</h3>
+      <input type="number" step="any" id="lat2" placeholder="Latitude (e.g. 40.730610)" value="40.730610" required>
+      <input type="number" step="any" id="lng2" placeholder="Longitude (e.g. -73.935242)" value="-73.935242" required>
+    </div>
+
+    <button type="submit">Get Sunrise Times</button>
+  </form>
+
+  <div id="results"></div>
+
+  <script>
+    const form = document.getElementById("sunrise-form");
+    const resultsDiv = document.getElementById("results");
+
+    const fetchSunrise = async (lat, lng) => {
+      const url = `https://api.sunrise-sunset.org/json?lat=${lat}&lng=${lng}`;
+      const response = await fetch(url);
+
+      if (!response.ok) {
+        throw new Error(`HTTP Error: ${response.status}`);
+      }
+
+      const data = await response.json();
+      
+      if (data.status !== "OK") {
+        throw new Error("Failed to retrieve valid sunrise data.");
+      }
+
+      return data.results.sunrise;
+    };
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      resultsDiv.textContent = "Loading...";
+
+      const lat1 = document.getElementById("lat1").value;
+      const lng1 = document.getElementById("lng1").value;
+      const lat2 = document.getElementById("lat2").value;
+      const lng2 = document.getElementById("lng2").value;
+
+      try {
+        const [sunriseCity1, sunriseCity2] = await Promise.all([
+          fetchSunrise(lat1, lng1),
+          fetchSunrise(lat2, lng2)
+        ]);
+
+        resultsDiv.innerHTML = `
+          <p><strong>City 1 Sunrise:</strong> ${sunriseCity1} (UTC)</p>
+          <p><strong>City 2 Sunrise:</strong> ${sunriseCity2} (UTC)</p>
+        `;
+
+      } catch (error) {
+        console.error("Error fetching sunrise data:", error.message);
+        resultsDiv.textContent = "An error occurred while fetching sunrise times. Please try again.";
+      }
+    });
+  </script>
+
+</body>
+</html>

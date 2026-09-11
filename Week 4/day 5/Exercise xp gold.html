@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Async/Await & Fetch Exercises</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      line-height: 1.6;
+    }
+    .gif-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      margin-top: 15px;
+    }
+    .gif-container img {
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+    button {
+      padding: 8px 16px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Exercise 1: Giphy API Generator</h1>
+  <button id="fetch-gif-btn">Fetch Random GIF</button>
+  <div id="gif-container" class="gif-container"></div>
+
+  <script>
+    //  Exercise 1 
+
+    const apiKey = "hpvZycW22qCjn5cRM1xtWB8NKq4dQ2My";
+    const fetchBtn = document.getElementById("fetch-gif-btn");
+    const container = document.getElementById("gif-container");
+
+    const fetchAndAppendGif = async () => {
+      const url = `https://api.giphy.com/v1/gifs/random?api_key=${apiKey}&rating=g`;
+
+      try {
+        const response = await fetch(url);
+
+        if (!response.ok) {
+          throw new Error(`HTTP Error! Status: ${response.status}`);
+        }
+
+        const { data } = await response.json();
+
+        const gifUrl = data.images.fixed_height.url;
+
+        const img = document.createElement("img");
+        img.src = gifUrl;
+        img.alt = data.title || "Random GIF";
+        container.appendChild(img);
+
+      } catch (error) {
+        console.error("Failed to fetch GIF:", error.message);
+      }
+    };
+
+    fetchBtn.addEventListener("click", fetchAndAppendGif);
+
+
+    //  Exercise 2 
+
+    /*
+    Outcome / Console Log Output Order:
+
+    1. ==SEQUENTIAL START==           (logged immediately)
+    2. starting slow promise          (logged immediately)
+    3. slow promise is done           (logged after 2 seconds)
+    4. slow                           (logged after 2 seconds)
+    5. starting fast promise          (logged after 2 seconds)
+    6. fast promise is done           (logged after 3 seconds)
+    7. fast                           (logged after 3 seconds)
+
+    Explanation: 
+    The 'await' keyword pauses execution sequentially. The 'fast' promise is not 
+    initiated until the 'slow' promise completely finishes resolving after 2 seconds.
+    */
+
+
+    // Exercise 3 
+
+    /*
+    Outcome / Console Log Output Order:
+
+    1. ==CONCURRENT START with await== (logged at t = 4s)
+    2. starting slow promise          (logged at t = 4s)
+    3. starting fast promise          (logged at t = 4s)
+    4. fast promise is done           (logged at t = 5s)
+    5. slow promise is done           (logged at t = 6s)
+    6. slow                           (logged at t = 6s)
+    7. fast                           (logged at t = 6s)
+
+    Explanation:
+    Both promises are invoked immediately without 'await', starting their timers in parallel.
+    At t = 5s, the fast timer finishes. At t = 6s, the slow timer finishes, and the 
+    awaited results are printed sequentially.
+    */
+
+
+    // Exercise 4 
+
+    const urls = [
+      "https://jsonplaceholder.typicode.com/users",
+      "https://jsonplaceholder.typicode.com/posts",
+      "https://jsonplaceholder.typicode.com/albums"
+    ];
+
+    const fetchJson = async (url) => {
+      const response = await fetch(url);
+      if (!response.ok) {
+        throw new Error(`HTTP Error: ${response.status}`);
+      }
+      return await response.json();
+    };
+
+    const getData = async function() {
+      try {
+        const [ users, posts, albums ] = await Promise.all(
+          urls.map(url => fetchJson(url))
+        );
+        console.log('users', users);
+        console.log('posta', posts);
+        console.log('albums', albums);
+      } catch (error) {
+        console.log('ooooooops');
+      }
+    };
+
+    getData();
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fetch API & Async/Await XP Ninja/Gold Exercises</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      line-height: 1.6;
+    }
+    .form-container {
+      margin-bottom: 20px;
+      display: flex;
+      gap: 10px;
+    }
+    input {
+      padding: 8px 12px;
+      font-size: 14px;
+      width: 250px;
+    }
+    button {
+      padding: 8px 16px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+    .btn-delete {
+      background-color: #ff4d4d;
+      color: white;
+      border: none;
+      border-radius: 4px;
+    }
+    .gif-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      margin-top: 15px;
+    }
+    .gif-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .gif-card img {
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      max-height: 200px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ========================================== -->
+  <!--  Exercise 1 
+      <!-- ========================================== -->
+
+  <h1>Exercise 1: Giphy API Search</h1>
+  
+  <form id="gif-form" class="form-container">
+    <input type="text" id="category-input" placeholder="Enter category (e.g. sun, cat)..." required>
+    <button type="submit">Fetch GIF</button>
+    <button type="button" id="delete-all-btn" class="btn-delete">Delete All</button>
+  </form>
+
+  <div id="gif-container" class="gif-container"></div>
+
+  <script>
+    //  Exercise 1 
+    const apiKey = "hpvZycW22qCjn5cRM1xtWB8NKq4dQ2My";
+    const gifForm = document.getElementById("gif-form");
+    const categoryInput = document.getElementById("category-input");
+    const container = document.getElementById("gif-container");
+    const deleteAllBtn = document.getElementById("delete-all-btn");
+
+    const fetchGifByCategory = async (event) => {
+      event.preventDefault();
+      const category = categoryInput.value.trim();
+      if (!category) return;
+
+      const url = `https://api.giphy.com/v1/gifs/random?api_key=${apiKey}&tag=${encodeURIComponent(category)}&rating=g`;
+
+      try {
+        const response = await fetch(url);
+
+        if (!response.ok) {
+          throw new Error(`HTTP Error! Status: ${response.status}`);
+        }
+
+        const { data } = await response.json();
+
+        if (!data || !data.images) {
+          alert("No GIF found for that category!");
+          return;
+        }
+
+        const gifUrl = data.images.fixed_height.url;
+
+        const card = document.createElement("div");
+        card.className = "gif-card";
+
+        const img = document.createElement("img");
+        img.src = gifUrl;
+        img.alt = category;
+
+        card.appendChild(img);
+        container.appendChild(card);
+
+        categoryInput.value = "";
+      } catch (error) {
+        console.error("Error fetching GIF:", error.message);
+      }
+    };
+
+    deleteAllBtn.addEventListener("click", () => {
+      container.innerHTML = "";
+    });
+
+    gifForm.addEventListener("submit", fetchGifByCategory);
+
+
+    let resolveAfter2Seconds = function () {
+      console.log("starting slow promise");
+      return new Promise(resolve => {
+        setTimeout(function () {
+          resolve("slow");
+          console.log("slow promise is done");
+        }, 2000);
+      });
+    };
+
+    let resolveAfter1Second = function () {
+      console.log("starting fast promise");
+      return new Promise(resolve => {
+        setTimeout(function () {
+          resolve("fast");
+          console.log("fast promise is done");
+        }, 1000);
+      });
+    };
+
+
+    // 🌟 Exercise 2 
+ /*
+    OUTCOME / CONSOLE LOG OUTPUT (Starts after t = 1000ms):
+    [t = 1000ms] ==CONCURRENT START with Promise.all==
+    [t = 1000ms] starting slow promise
+    [t = 1000ms] starting fast promise
+    [t = 2000ms] fast promise is done
+    [t = 3000ms] slow promise is done
+    [t = 3000ms] slow
+    [t = 3000ms] fast  /
+
+    EXPLANATION:
+    1. At t=1s, `Promise.all` executes both `resolveAfter2Seconds()` and `resolveAfter1Second()` concurrently.
+    2. At t=2s (1s after call), fast timer finishes and logs "fast promise is done".
+    3. At t=3s (2s after call), slow timer finishes and logs "slow promise is done".
+    4. `Promise.all` fulfills and passes the array `["slow", "fast"]` to `.then()`, logging "slow" then "fast".
+    */
+    let concurrentPromise = function () {
+      console.log('==CONCURRENT START with Promise.all==');
+      return Promise.all([resolveAfter2Seconds(), resolveAfter1Second()]).then((messages) => {
+        console.log(messages[0]);
+        console.log(messages[1]);
+      });
+    };
+
+    setTimeout(concurrentPromise, 1000);
+
+
+    //  Exercise 3 
+    /*
+    OUTCOME / CONSOLE LOG OUTPUT (Starts after t = 5000ms):
+    [t = 5000ms] ==PARALLEL with await Promise.all==
+    [t = 5000ms] starting slow promise
+    [t = 5000ms] starting fast promise
+    [t = 6000ms] fast promise is done
+    [t = 6000ms] fast
+    [t = 7000ms] slow promise is done
+    [t = 7000ms] slow
+
+    EXPLANATION:
+    1. At t=5s, two anonymous IIFEs are executed concurrently inside `Promise.all`.
+    2. At t=6s (1s after call), fast promise finishes, logs "fast promise is done", and `await` unwraps and prints "fast" immediately inside its own IIFE.
+    3. At t=7s (2s after call), slow promise finishes, logs "slow promise is done", and `await` unwraps and prints "slow".
+    */
+    let parallel = async function () {
+      console.log('==PARALLEL with await Promise.all==');
+      await Promise.all([
+        (async () => console.log(await resolveAfter2Seconds()))(),
+        (async () => console.log(await resolveAfter1Second()))()
+      ]);
+    };
+
+    setTimeout(parallel, 5000);
+
+
+    // Exercise 4 
+    /*
+    OUTCOME / CONSOLE LOG OUTPUT (Starts after t = 13000ms):
+    [t = 13000ms] ==PARALLEL with Promise.then==
+    [t = 13000ms] starting slow promise
+    [t = 13000ms] starting fast promise
+    [t = 14000ms] fast promise is done
+    [t = 14000ms] fast
+    [t = 15000ms] slow promise is done
+    [t = 15000ms] slow
+
+    EXPLANATION:
+    1. At t=13s, both functions run independently with attached `.then()` callbacks.
+    2. At t=14s (1s later), fast promise finishes, logs "fast promise is done", and its `.then()` prints "fast".
+    3. At t=15s (2s later), slow promise finishes, logs "slow promise is done", and its `.then()` prints "slow".
+    */
+    let parallelPromise = function () {
+      console.log('==PARALLEL with Promise.then==');
+      resolveAfter2Seconds().then((message) => console.log(message));
+      resolveAfter1Second().then((message) => console.log(message));
+    };
+
+    setTimeout(parallelPromise, 13000);
+  </script>
+
+</body>
+</html>
