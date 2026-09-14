@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Currency Converter</title>
+  
+  <!-- FontAwesome for the switch arrow icon -->
+  <link 
+    rel="stylesheet" 
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" 
+  />
+  
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background: #eef2f5;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .converter-card {
+      background: #ffffff;
+      width: 100%;
+      max-width: 450px;
+      padding: 30px;
+      border-radius: 16px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+    }
+
+    h2 {
+      margin-bottom: 20px;
+      color: #333;
+      text-align: center;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #666;
+      margin-bottom: 8px;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 1rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    input:focus, select:focus {
+      border-color: #4a90e2;
+    }
+
+    /* Currency Rows & Switch Button Alignment */
+    .converter-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .select-box {
+      flex: 1;
+    }
+
+    .switch-btn {
+      background: #4a90e2;
+      color: white;
+      border: none;
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      margin-top: 22px;
+      transition: transform 0.2s, background 0.2s;
+      flex-shrink: 0;
+    }
+
+    .switch-btn:hover {
+      background: #357abd;
+      transform: rotate(180deg);
+    }
+
+    .convert-btn {
+      width: 100%;
+      background: #28a745;
+      color: white;
+      border: none;
+      padding: 14px;
+      font-size: 1rem;
+      font-weight: 600;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .convert-btn:hover {
+      background: #218838;
+    }
+
+    .result-box {
+      margin-top: 20px;
+      padding: 15px;
+      border-radius: 8px;
+      background: #f8f9fa;
+      border: 1px solid #e9ecef;
+      text-align: center;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: #333;
+      min-height: 55px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .error-msg {
+      color: #dc3545;
+      font-size: 0.95rem;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="converter-card">
+    <h2>Currency Converter</h2>
+
+    <!-- Amount Input -->
+    <div class="form-group">
+      <label for="amount">Amount</label>
+      <input type="number" id="amount" value="1" min="0" step="any" placeholder="Enter amount" />
+    </div>
+
+    <!-- Currency Selection Row with Switch Button -->
+    <div class="converter-row">
+      <div class="select-box">
+        <label for="from-currency">From</label>
+        <select id="from-currency">
+          <option value="">Loading...</option>
+        </select>
+      </div>
+
+      <!-- Bonus Switch Button -->
+      <button class="switch-btn" id="switch-btn" title="Switch Currencies">
+        <i class="fa-solid fa-arrow-rotate-left"></i>
+      </button>
+
+      <div class="select-box">
+        <label for="to-currency">To</label>
+        <select id="to-currency">
+          <option value="">Loading...</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Convert Action Button -->
+    <button class="convert-btn" id="convert-btn">Convert</button>
+
+    <!-- Result Display -->
+    <div class="result-box" id="result-box">
+      <span>Select currencies to convert</span>
+    </div>
+  </div>
+
+  <script>
+    // ------------------------------------------------------------------
+    // Replace 'YOUR-API-KEY' with your actual key from ExchangeRate-API.
+    // ------------------------------------------------------------------
+    const API_KEY = 'YOUR-API-KEY'; 
+    const BASE_URL = `https://v6.exchangerate-api.com/v6/${API_KEY}`;
+
+    // DOM Elements
+    const amountInput = document.getElementById('amount');
+    const fromSelect = document.getElementById('from-currency');
+    const toSelect = document.getElementById('to-currency');
+    const convertBtn = document.getElementById('convert-btn');
+    const switchBtn = document.getElementById('switch-btn');
+    const resultBox = document.getElementById('result-box');
+
+    // 1. Fetch Supported Codes on initialization
+    async function fetchSupportedCurrencies() {
+      try {
+        const response = await fetch(`${BASE_URL}/codes`);
+        
+        if (!response.ok) {
+          throw new Error(`Error fetching currencies (Status: ${response.status})`);
+        }
+
+        const data = await response.json();
+        
+        if (data.result === 'success') {
+          populateDropdowns(data.supported_codes);
+        } else {
+          throw new Error(data['error-type'] || 'Failed to fetch currency list');
+        }
+      } catch (error) {
+        resultBox.innerHTML = `<span class="error-msg">${error.message}. Please check your API key.</span>`;
+      }
+    }
+
+    // Helper: Fill <select> elements with codes
+    function populateDropdowns(codes) {
+      fromSelect.innerHTML = '';
+      toSelect.innerHTML = '';
+
+      codes.forEach(([code, name]) => {
+        const option1 = document.createElement('option');
+        option1.value = code;
+        option1.textContent = `${code} - ${name}`;
+
+        const option2 = option1.cloneNode(true);
+
+        fromSelect.appendChild(option1);
+        toSelect.appendChild(option2);
+      });
+
+      // Default Selections
+      fromSelect.value = 'USD';
+      toSelect.value = 'EUR';
+    }
+
+    // 2. Fetch Conversion Rate using Pair Conversion Endpoint
+    async function convertCurrency() {
+      const from = fromSelect.value;
+      const to = toSelect.value;
+      const amount = parseFloat(amountInput.value);
+
+      if (!amount || amount <= 0) {
+        resultBox.innerHTML = '<span class="error-msg">Please enter a valid amount.</span>';
+        return;
+      }
+
+      resultBox.textContent = 'Converting...';
+
+      try {
+        // Supplying optional AMOUNT variable directly in endpoint path
+        const response = await fetch(`${BASE_URL}/pair/${from}/${to}/${amount}`);
+
+        if (!response.ok) {
+          throw new Error('Network response was not OK');
+        }
+
+        const data = await response.json();
+
+        if (data.result === 'success') {
+          const convertedAmount = data.conversion_result.toFixed(2);
+          resultBox.textContent = `${amount} ${from} = ${convertedAmount} ${to}`;
+        } else {
+          throw new Error(data['error-type'] || 'Conversion failed');
+        }
+      } catch (error) {
+        resultBox.innerHTML = `<span class="error-msg">Error: ${error.message}</span>`;
+      }
+    }
+
+    // 3. Bonus: Switch Currencies
+    function handleSwitch() {
+      const temp = fromSelect.value;
+      fromSelect.value = toSelect.value;
+      toSelect.value = temp;
+
+      // Automatically convert with switched parameters
+      convertCurrency();
+    }
+
+    // Event Listeners
+    convertBtn.addEventListener('click', convertCurrency);
+    switchBtn.addEventListener('click', handleSwitch);
+
+    // Initialize dropdowns on page load
+    fetchSupportedCurrencies();
+  </script>
+</body>
+</html>
