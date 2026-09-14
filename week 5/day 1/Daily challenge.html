@@ -186,13 +186,10 @@
   </div>
 
   <script>
-    // ------------------------------------------------------------------
-    // Replace 'YOUR-API-KEY' with your actual key from ExchangeRate-API.
-    // ------------------------------------------------------------------
+    
     const API_KEY = 'YOUR-API-KEY'; 
     const BASE_URL = `https://v6.exchangerate-api.com/v6/${API_KEY}`;
 
-    // DOM Elements
     const amountInput = document.getElementById('amount');
     const fromSelect = document.getElementById('from-currency');
     const toSelect = document.getElementById('to-currency');
@@ -200,7 +197,6 @@
     const switchBtn = document.getElementById('switch-btn');
     const resultBox = document.getElementById('result-box');
 
-    // 1. Fetch Supported Codes on initialization
     async function fetchSupportedCurrencies() {
       try {
         const response = await fetch(`${BASE_URL}/codes`);
@@ -221,7 +217,6 @@
       }
     }
 
-    // Helper: Fill <select> elements with codes
     function populateDropdowns(codes) {
       fromSelect.innerHTML = '';
       toSelect.innerHTML = '';
@@ -237,12 +232,10 @@
         toSelect.appendChild(option2);
       });
 
-      // Default Selections
       fromSelect.value = 'USD';
       toSelect.value = 'EUR';
     }
 
-    // 2. Fetch Conversion Rate using Pair Conversion Endpoint
     async function convertCurrency() {
       const from = fromSelect.value;
       const to = toSelect.value;
@@ -256,7 +249,6 @@
       resultBox.textContent = 'Converting...';
 
       try {
-        // Supplying optional AMOUNT variable directly in endpoint path
         const response = await fetch(`${BASE_URL}/pair/${from}/${to}/${amount}`);
 
         if (!response.ok) {
@@ -276,13 +268,11 @@
       }
     }
 
-    // 3. Bonus: Switch Currencies
     function handleSwitch() {
       const temp = fromSelect.value;
       fromSelect.value = toSelect.value;
       toSelect.value = temp;
 
-      // Automatically convert with switched parameters
       convertCurrency();
     }
 
@@ -290,7 +280,6 @@
     convertBtn.addEventListener('click', convertCurrency);
     switchBtn.addEventListener('click', handleSwitch);
 
-    // Initialize dropdowns on page load
     fetchSupportedCurrencies();
   </script>
 </body>

@@ -313,7 +313,6 @@
     const findBtn = document.getElementById('find-btn');
     const contentDiv = document.getElementById('content');
 
-    // Helper: Fetch Homeworld Name
     async function fetchHomeworld(url) {
       try {
         const response = await fetch(url);
@@ -325,7 +324,6 @@
       }
     }
 
-    // Primary Fetch Function
     async function getRandomCharacter() {
       displayLoading();
 
@@ -341,7 +339,6 @@
         const data = await response.json();
         const characterProps = data.result.properties;
 
-        // Fetch Homeworld details asynchronously
         const homeworldName = await fetchHomeworld(characterProps.homeworld);
 
         const character = {
@@ -359,7 +356,6 @@
       }
     }
 
-    // UI State 1: Loading
     function displayLoading() {
       contentDiv.innerHTML = `
         <div class="loading-container">
@@ -369,7 +365,6 @@
       `;
     }
 
-    // UI State 2: Display Character Grid Data
     function displayCharacter(char) {
       contentDiv.innerHTML = `
         <h2 class="char-title">${char.name}</h2>
@@ -394,7 +389,6 @@
       `;
     }
 
-    // UI State 3: Error Message
     function displayError() {
       contentDiv.innerHTML = `
         <p class="error-msg">Oh No! That person isn't available.</p>

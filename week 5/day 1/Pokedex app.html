@@ -405,7 +405,6 @@
 
     let currentPokemonId = null;
 
-    // Type Dynamic Palette
     const typeColors = {
       fire: '#661b14', water: '#143866', grass: '#174722', electric: '#5e5414',
       ice: '#194f5e', fighting: '#521d14', poison: '#421452', ground: '#523c14',
@@ -414,7 +413,6 @@
       fairy: '#5e2346', normal: '#3d3a33'
     };
 
-    // Synthesized Web Audio Engine
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
     function playSound(type) {
@@ -458,14 +456,12 @@
       }
     }
 
-    // Interactive Lid Toggle
     pokedexLid.addEventListener('click', () => {
       playSound('open');
       pokedexLid.classList.add('open');
       if (!currentPokemonId) getRandomPokemon();
     });
 
-    // Subtle 3D Mouse Parallax Effect
     document.addEventListener('mousemove', (e) => {
       const x = (window.innerWidth / 2 - e.pageX) / 45;
       const y = (window.innerHeight / 2 - e.pageY) / 45;
@@ -491,7 +487,6 @@
       ledGreen.classList.toggle('active', success);
     }
 
-    // Data Fetching
     async function fetchPokemon(idOrName) {
       displayLoading();
 
@@ -559,7 +554,6 @@
       `;
     }
 
-    // Button Listeners
     async function getRandomPokemon() {
       playSound('click');
       const randomId = Math.floor(Math.random() * 898) + 1;
