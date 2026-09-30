@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Real-Time Chat App</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Join Screen -->
+  <div id="join-container" class="card">
+    <h2>Join Chat Room</h2>
+    <form id="join-form">
+      <div class="form-group">
+        <label for="username">Username</label>
+        <input type="text" id="username" placeholder="Enter username..." required autocomplete="off">
+      </div>
+      <div class="form-group">
+        <label for="room">Select Room</label>
+        <select id="room">
+          <option value="General">General</option>
+          <option value="Tech Talk">Tech Talk</option>
+          <option value="Random">Random</option>
+        </select>
+      </div>
+      <button type="submit" class="btn">Join Chat</button>
+    </form>
+  </div>
+
+  <!-- Chat Screen -->
+  <div id="chat-container" class="card hidden">
+    <header class="chat-header">
+      <h2>Room: <span id="room-name"></span></h2>
+      <button id="leave-btn" class="btn btn-secondary">Leave</button>
+    </header>
+
+    <div class="chat-body">
+      <!-- Sidebar / Active Users -->
+      <aside class="sidebar">
+        <h3>Active Users</h3>
+        <ul id="users-list"></ul>
+      </aside>
+
+      <!-- Message History Container -->
+      <main class="chat-messages" id="chat-messages"></main>
+    </div>
+
+    <!-- Message Input Form -->
+    <form id="chat-form" class="chat-form">
+      <input id="msg" type="text" placeholder="Type a message..." required autocomplete="off" />
+      <button type="submit" class="btn">Send</button>
+    </form>
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="main.js"></script>
+</body>
+</html>

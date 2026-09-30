@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Turn-Based Grid Strategy</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Auth Screen -->
+  <div id="auth-screen">
+    <h2>Player Login / Registration</h2>
+    <div>
+      <input type="text" id="username" placeholder="Username">
+      <input type="password" id="password" placeholder="Password">
+      <button onclick="auth('login')">Login</button>
+      <button onclick="auth('register')">Register</button>
+    </div>
+    <p id="auth-status"></p>
+  </div>
+
+  <!-- Setup Screen -->
+  <div id="setup-screen" class="hidden">
+    <h2>Start Game Session</h2>
+    <input type="text" id="p1-name" placeholder="Player 1 Name">
+    <input type="text" id="p2-name" placeholder="Player 2 Name">
+    <button onclick="startGame()">Start Game</button>
+  </div>
+
+  <!-- Game Interface -->
+  <div id="game-screen" class="hidden">
+    <h2 id="status-msg">Game Log</h2>
+    
+    <div class="main-container">
+      <div id="board" class="grid-board"></div>
+
+      <div class="controls">
+        <h3>Controls</h3>
+        <p>Current Turn: <strong id="current-turn">-</strong></p>
+        <div class="d-pad">
+          <button onclick="makeMove('up')">⬆️ Up</button>
+          <div class="row">
+            <button onclick="makeMove('left')">⬅️ Left</button>
+            <button onclick="makeMove('right')">Right ➡️</button>
+          </div>
+          <button onclick="makeMove('down')">⬇️ Down</button>
+        </div>
+        <button id="attack-btn" onclick="attackBase()">💥 Attack Base</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
