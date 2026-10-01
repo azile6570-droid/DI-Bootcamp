@@ -1,0 +1,191 @@
+:root {
+  --brand: #f04d32;
+  --ink: #171717;
+  --muted-band: #f4f4f4;
+  --content-width: 1080px;
+}
+
+.site-header {
+  background: var(--brand);
+  color: #fff;
+  text-align: center;
+}
+
+.header-inner {
+  padding-top: 1.25rem;
+  padding-bottom: 1rem;
+}
+
+.brand-name {
+  color: inherit;
+  display: inline-block;
+  font-size: 2.35rem;
+  line-height: 1.1;
+  text-decoration: none;
+}
+
+.brand-tagline {
+  margin: 0.25rem 0 0.85rem;
+  font-size: 0.95rem;
+}
+
+.site-nav {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem 1.4rem;
+}
+
+.site-nav a {
+  color: #fff;
+  font-size: 0.9rem;
+  text-decoration: none;
+  text-underline-offset: 0.2em;
+}
+
+.site-nav a:hover,
+.site-nav a:focus-visible {
+  text-decoration: underline;
+}
+
+.features {
+  max-width: var(--content-width);
+  padding-top: 0.5rem;
+}
+
+.feature-row {
+  align-items: center;
+  min-height: 9rem;
+  padding: 1.2rem 1.4rem;
+}
+
+.feature-row--shaded {
+  background: var(--muted-band);
+}
+
+.feature-icon {
+  display: grid;
+  min-height: 6.5rem;
+  place-items: center;
+  color: var(--brand);
+  font-size: 4.8rem;
+}
+
+.feature-copy h2 {
+  margin: 0 0 0.25rem;
+  color: var(--ink);
+  font-size: 1.35rem;
+  font-weight: 700;
+}
+
+.feature-copy p {
+  margin: 0;
+  font-size: 0.94rem;
+  line-height: 1.45;
+}
+
+.contact-section {
+  max-width: var(--content-width);
+  margin: 0 auto 2.5rem;
+  padding: 1.5rem 1.75rem 1.75rem;
+  background: var(--muted-band);
+}
+
+.contact-title {
+  margin: 0 0 1rem;
+  color: var(--ink);
+  font-size: 1.5rem;
+  font-weight: 700;
+  text-align: center;
+}
+
+.contact-details {
+  align-self: center;
+  font-size: 0.95rem;
+}
+
+.contact-details p {
+  margin: 0 0 0.75rem;
+}
+
+.contact-details ul {
+  display: grid;
+  gap: 0.45rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.contact-details li {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.contact-icon {
+  width: 1rem;
+  color: var(--brand);
+}
+
+.contact-form label {
+  display: block;
+  margin-bottom: 0.4rem;
+  font-size: 0.9rem;
+}
+
+.contact-form .form-control {
+  margin-bottom: 0.65rem;
+  border-radius: 0;
+}
+
+.contact-form textarea {
+  min-height: 8rem;
+  resize: vertical;
+}
+
+.contact-form .btn-send {
+  width: 100%;
+  border: 0;
+  border-radius: 0;
+  background: var(--brand);
+  color: #fff;
+}
+
+.contact-form .btn-send:hover,
+.contact-form .btn-send:focus-visible {
+  background: #d84027;
+  color: #fff;
+}
+
+@media (max-width: 767.98px) {
+  .header-inner {
+    padding: 1rem 1rem 0.9rem;
+  }
+
+  .brand-name {
+    font-size: 2rem;
+  }
+
+  .features {
+    padding: 0;
+  }
+
+  .feature-row {
+    padding: 1.5rem 1.25rem;
+  }
+
+  .feature-icon {
+    min-height: auto;
+    margin-bottom: 0.85rem;
+    font-size: 4.3rem;
+  }
+
+  .contact-section {
+    margin: 0 0 1.5rem;
+    padding: 1.35rem 1.15rem;
+  }
+
+  .contact-details {
+    margin-bottom: 1.6rem;
+  }
+}
