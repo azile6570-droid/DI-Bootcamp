@@ -1,0 +1,317 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Install Exercise XP dependencies",
+			"type": "shell",
+			"command": "npm.cmd",
+			"args": [
+				"--prefix",
+				"week 7/day 5/EXERCISE XP",
+				"install"
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Build Exercise XP",
+			"type": "shell",
+			"command": "npm.cmd",
+			"args": [
+				"--prefix",
+				"week 7/day 5/EXERCISE XP",
+				"run",
+				"build"
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Run Exercise XP dev server",
+			"type": "shell",
+			"command": "npm.cmd",
+			"args": [
+				"--prefix",
+				"week 7/day 5/EXERCISE XP",
+				"run",
+				"dev",
+				"--",
+				"--host",
+				"0.0.0.0"
+			],
+			"isBackground": true,
+			"problemMatcher": []
+		},
+		{
+			"label": "Install Exercise XP Gold dependencies",
+			"type": "shell",
+			"command": "npm.cmd",
+			"args": [
+				"--prefix",
+				"week 7/day 5/EXERCISE XP GOLD",
+				"install"
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Build Exercise XP Gold",
+			"type": "shell",
+			"command": "npm.cmd",
+			"args": [
+				"--prefix",
+				"week 7/day 5/EXERCISE XP GOLD",
+				"run",
+				"build"
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Run Exercise XP Gold dev server",
+			"type": "shell",
+			"command": "npm.cmd",
+			"args": [
+				"--prefix",
+				"week 7/day 5/EXERCISE XP GOLD",
+				"run",
+				"dev",
+				"--",
+				"--host",
+				"0.0.0.0",
+				"--port",
+				"5174",
+				"--strictPort"
+			],
+			"isBackground": true,
+			"problemMatcher": []
+		},
+		{
+			"label": "Install Gold 2 dependencies",
+			"type": "shell",
+			"command": "npm.cmd",
+			"args": [
+				"--prefix",
+				"week 7/day 5/EXERCISE XP GOLD#2",
+				"install"
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Build Gold 2 forms app",
+			"type": "shell",
+			"command": "npm.cmd",
+			"args": [
+				"--prefix",
+				"week 7/day 5/EXERCISE XP GOLD#2",
+				"run",
+				"build"
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Retry Gold 2 build",
+			"type": "shell",
+			"command": "npm.cmd",
+			"args": [
+				"--prefix",
+				"week 7/day 5/EXERCISE XP GOLD#2",
+				"run",
+				"build"
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Run Gold 2 forms app",
+			"type": "shell",
+			"command": "npm.cmd",
+			"args": [
+				"--prefix",
+				"week 7/day 5/EXERCISE XP GOLD#2",
+				"run",
+				"dev",
+				"--",
+				"--host",
+				"0.0.0.0",
+				"--port",
+				"5175",
+				"--strictPort"
+			],
+			"isBackground": true,
+			"problemMatcher": []
+		},
+		{
+			"label": "Rebuild Gold 2 after phone validation fix",
+			"type": "shell",
+			"command": "npm.cmd",
+			"args": [
+				"--prefix",
+				"week 7/day 5/EXERCISE XP GOLD#2",
+				"run",
+				"build"
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Check Gold 2 dev routes",
+			"type": "shell",
+			"command": "node",
+			"args": [
+				"-e",
+				"const urls=['http://localhost:5175/','http://localhost:5175/src/main.jsx','http://localhost:5175/src/Components/BookForm.jsx','http://localhost:5175/src/Components/UserForm.jsx']; Promise.all(urls.map(async (url) => { const response = await fetch(url); console.log(response.status, new URL(url).pathname); if (!response.ok) process.exitCode = 1; })).catch((error) => { console.error(error); process.exitCode = 1; });"
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Recheck Gold 2 dev routes",
+			"type": "shell",
+			"command": "node",
+			"args": [
+				"-e",
+				"const urls=[\"http://localhost:5175/\",\"http://localhost:5175/src/main.jsx\",\"http://localhost:5175/src/Components/BookForm.jsx\",\"http://localhost:5175/src/Components/UserForm.jsx\"]; Promise.all(urls.map(async (url) => { const response = await fetch(url); console.log(response.status, new URL(url).pathname); if (!response.ok) process.exitCode = 1; })).catch((error) => { console.error(error); process.exitCode = 1; });"
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Check Gold 2 live page",
+			"type": "shell",
+			"command": "curl.exe",
+			"args": [
+				"-sS",
+				"-o",
+				"NUL",
+				"-w",
+				"%{http_code}",
+				"http://localhost:5175/"
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Preview Gold 2 forms app",
+			"type": "shell",
+			"command": "npm.cmd",
+			"args": [
+				"--prefix",
+				"week 7/day 5/EXERCISE XP GOLD#2",
+				"run",
+				"preview",
+				"--",
+				"--host",
+				"0.0.0.0",
+				"--port",
+				"5175",
+				"--strictPort"
+			],
+			"isBackground": true,
+			"problemMatcher": []
+		},
+		{
+			"label": "Rebuild Gold 2 phone validation",
+			"type": "shell",
+			"command": "npm.cmd",
+			"args": [
+				"--prefix",
+				"week 7/day 5/EXERCISE XP GOLD#2",
+				"run",
+				"build"
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Install Exercise XP Ninja dependencies",
+			"type": "shell",
+			"command": "npm.cmd",
+			"args": [
+				"--prefix",
+				"week 7/day 5/EXERCISE XP NINJA",
+				"install"
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Build Exercise XP Ninja",
+			"type": "shell",
+			"command": "npm.cmd",
+			"args": [
+				"--prefix",
+				"week 7/day 5/EXERCISE XP NINJA",
+				"run",
+				"build"
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Run Exercise XP Ninja app",
+			"type": "shell",
+			"command": "npm.cmd",
+			"args": [
+				"--prefix",
+				"week 7/day 5/EXERCISE XP NINJA",
+				"run",
+				"dev",
+				"--",
+				"--host",
+				"0.0.0.0",
+				"--port",
+				"5176",
+				"--strictPort"
+			],
+			"isBackground": true,
+			"problemMatcher": []
+		},
+		{
+			"label": "Install voting app dependencies",
+			"type": "shell",
+			"command": "npm.cmd",
+			"args": [
+				"--prefix",
+				"week 7/day 5/DAILY CHALLENGE",
+				"install"
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Build voting app",
+			"type": "shell",
+			"command": "npm.cmd",
+			"args": [
+				"--prefix",
+				"week 7/day 5/DAILY CHALLENGE",
+				"run",
+				"build"
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Run daily voting challenge",
+			"type": "shell",
+			"command": "npm.cmd",
+			"args": [
+				"--prefix",
+				"week 7/day 5/DAILY CHALLENGE",
+				"run",
+				"dev",
+				"--",
+				"--host",
+				"0.0.0.0",
+				"--port",
+				"5177",
+				"--strictPort"
+			],
+			"isBackground": true,
+			"problemMatcher": []
+		}
+	]
+}
