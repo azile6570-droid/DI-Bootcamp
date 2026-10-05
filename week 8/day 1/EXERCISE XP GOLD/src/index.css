@@ -1,0 +1,370 @@
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap");
+
+:root {
+  font-family: "DM Sans", sans-serif;
+  color: #25271f;
+  background: #f5f4f0;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  --ink: #25271f;
+  --muted: #797c72;
+  --green: #456d4a;
+  --line: #e7e6df;
+  --paper: #fffefa;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  min-width: 320px;
+  min-height: 100vh;
+  margin: 0;
+  background:
+    radial-gradient(ellipse at 85% 12%, #e8ecdf 0, transparent 26rem),
+    #f5f4f0;
+}
+
+button {
+  font: inherit;
+}
+
+.page-shell {
+  width: min(920px, calc(100% - 42px));
+  min-height: 100vh;
+  margin: 0 auto;
+}
+
+.topbar {
+  display: flex;
+  height: 78px;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #e4e5dc;
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--ink);
+  font-family: Manrope, sans-serif;
+  font-size: 0.95rem;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.brand-mark {
+  display: grid;
+  width: 32px;
+  height: 32px;
+  place-items: center;
+  border-radius: 9px 9px 9px 3px;
+  background: var(--green);
+  color: white;
+}
+
+.brand i {
+  color: var(--muted);
+  font-style: normal;
+  font-weight: 500;
+}
+
+.topbar-note,
+.eyebrow,
+.card-label,
+.footer {
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+}
+
+.topbar-note {
+  color: #8b8e83;
+}
+
+.hero {
+  padding: 74px 0 35px;
+}
+
+.eyebrow,
+.card-label {
+  color: var(--green);
+}
+
+.hero h1 {
+  margin: 13px 0 11px;
+  font-family: Manrope, sans-serif;
+  font-size: clamp(2.25rem, 5vw, 3.5rem);
+  font-weight: 700;
+  letter-spacing: -0.065em;
+  line-height: 1.08;
+}
+
+.hero p {
+  max-width: 530px;
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.96rem;
+  line-height: 1.7;
+}
+
+.demo-card {
+  position: relative;
+  display: grid;
+  grid-template-columns: 58px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 22px;
+  padding: 34px;
+  border: 1px solid var(--line);
+  border-radius: 15px;
+  background: var(--paper);
+  box-shadow: 0 15px 40px #424b3210;
+}
+
+.demo-icon {
+  position: relative;
+  display: grid;
+  width: 58px;
+  height: 58px;
+  place-items: center;
+  border-radius: 16px;
+  background: #edf2e9;
+}
+
+.demo-icon span {
+  position: absolute;
+  width: 24px;
+  height: 28px;
+  border: 2px solid #60815c;
+  border-radius: 9px 9px 8px 4px;
+  transform: rotate(-13deg);
+}
+
+.demo-icon span + span {
+  transform: rotate(13deg) translate(1px, 1px);
+  opacity: 0.45;
+}
+
+.demo-copy h2 {
+  margin: 7px 0 6px;
+  font-family: Manrope, sans-serif;
+  font-size: 1.32rem;
+  letter-spacing: -0.04em;
+}
+
+.demo-copy p {
+  max-width: 490px;
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.83rem;
+  line-height: 1.65;
+}
+
+.card-label {
+  font-size: 0.57rem;
+}
+
+.trigger-button,
+.close-button {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: 0 17px;
+  border: 0;
+  border-radius: 8px;
+  background: var(--green);
+  color: white;
+  cursor: pointer;
+  font-size: 0.82rem;
+  font-weight: 600;
+  transition: background 140ms ease, transform 140ms ease;
+}
+
+.trigger-button:hover,
+.close-button:hover {
+  transform: translateY(-1px);
+  background: #365a3b;
+}
+
+.trigger-button span {
+  font-size: 1rem;
+}
+
+.boundary-status {
+  grid-column: 2 / -1;
+  margin: -8px 0 0;
+  color: #899084;
+  font-size: 0.72rem;
+}
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  padding: 23px 2px;
+  color: #96988f;
+  font-size: 0.54rem;
+}
+
+.modal-background {
+  position: fixed;
+  z-index: 10;
+  display: flex;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgb(25 28 25 / 55%);
+  animation: fade-in 140ms ease-out;
+}
+
+.modal-body {
+  width: min(440px, 100%);
+  padding: 30px;
+  border: 1px solid #e9e8e0;
+  border-radius: 12px;
+  background: var(--paper);
+  box-shadow: 0 25px 80px #11140f44;
+  animation: rise-in 180ms ease-out;
+}
+
+.modal-icon {
+  display: grid;
+  width: 38px;
+  height: 38px;
+  margin-bottom: 18px;
+  place-items: center;
+  border-radius: 50%;
+  background: #f8e8e4;
+  color: #a84c3f;
+  font-family: Manrope, sans-serif;
+  font-size: 1.1rem;
+  font-weight: 800;
+}
+
+.modal-body h2 {
+  margin: 8px 0 7px;
+  font-family: Manrope, sans-serif;
+  font-size: 1.55rem;
+  letter-spacing: -0.05em;
+}
+
+.modal-message {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.87rem;
+  line-height: 1.6;
+}
+
+.error-details {
+  margin-top: 17px;
+  color: #686c62;
+  font-size: 0.75rem;
+}
+
+.error-details summary {
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.error-details pre {
+  max-height: 130px;
+  overflow: auto;
+  padding: 10px;
+  border-radius: 6px;
+  background: #f2f1eb;
+  white-space: pre-wrap;
+  font-size: 0.65rem;
+  line-height: 1.5;
+}
+
+.close-button {
+  width: 100%;
+  margin-top: 22px;
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes rise-in {
+  from { transform: translateY(8px) scale(0.99); opacity: 0; }
+  to { transform: translateY(0) scale(1); opacity: 1; }
+}
+
+@media (max-width: 650px) {
+  .page-shell {
+    width: min(100% - 30px, 500px);
+  }
+
+  .hero {
+    padding: 55px 0 27px;
+  }
+
+  .demo-card {
+    grid-template-columns: 48px minmax(0, 1fr);
+    gap: 16px;
+    padding: 23px;
+  }
+
+  .demo-icon {
+    width: 48px;
+    height: 48px;
+  }
+
+  .trigger-button {
+    grid-column: 1 / -1;
+    width: 100%;
+  }
+
+  .boundary-status {
+    grid-column: 1 / -1;
+    margin: -7px 0 0;
+  }
+}
+
+@media (max-width: 430px) {
+  .topbar {
+    height: 68px;
+  }
+
+  .topbar-note {
+    max-width: 125px;
+    font-size: 0.52rem;
+    text-align: right;
+  }
+
+  .hero h1 {
+    font-size: 2.35rem;
+  }
+
+  .demo-card {
+    padding: 20px 17px;
+  }
+
+  .demo-copy h2 {
+    font-size: 1.14rem;
+  }
+
+  .footer {
+    gap: 10px;
+    font-size: 0.46rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

@@ -1,0 +1,441 @@
+@import url("https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap");
+
+:root {
+  font-family: "DM Sans", sans-serif;
+  color: #edf1ed;
+  background: #111b23;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  --ink: #edf1ed;
+  --muted: #89969a;
+  --mint: #9fceb9;
+  --line: #27343c;
+  --mono: "DM Mono", monospace;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  min-width: 320px;
+  min-height: 100vh;
+  margin: 0;
+  background:
+    radial-gradient(ellipse at 50% 49%, #1b2b32 0, #111b23 31rem),
+    #111b23;
+}
+
+.page-shell {
+  width: min(940px, calc(100% - 42px));
+  margin: 0 auto;
+}
+
+.topbar {
+  display: flex;
+  height: 76px;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #27343c;
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--ink);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-decoration: none;
+}
+
+.brand-mark {
+  display: grid;
+  width: 30px;
+  height: 30px;
+  place-items: center;
+  border: 1px solid #466557;
+  border-radius: 50%;
+  color: var(--mint);
+  font-size: 1rem;
+}
+
+.brand i {
+  color: #819096;
+  font-style: normal;
+  font-weight: 500;
+}
+
+.live-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #9ba7a6;
+  font-size: 0.57rem;
+  font-weight: 600;
+  letter-spacing: 0.13em;
+}
+
+.live-indicator i {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #8cc7a9;
+  box-shadow: 0 0 10px #8cc7a988;
+}
+
+.intro {
+  padding: 35px 0 16px;
+  text-align: center;
+}
+
+.eyebrow,
+.meta-label,
+.face-caption,
+.digital-time i,
+.footer {
+  font-size: 0.58rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+}
+
+.eyebrow {
+  color: var(--mint);
+}
+
+.intro h1 {
+  margin: 9px 0 8px;
+  font-family: Manrope, sans-serif;
+  font-size: clamp(2rem, 4vw, 2.8rem);
+  font-weight: 600;
+  letter-spacing: -0.055em;
+  line-height: 1.05;
+}
+
+.intro p {
+  max-width: 425px;
+  margin: 0 auto;
+  color: var(--muted);
+  font-size: 0.83rem;
+  line-height: 1.6;
+}
+
+.clock-card {
+  position: relative;
+  display: flex;
+  min-height: 555px;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 13px;
+  overflow: hidden;
+  border: 1px solid #29383f;
+  border-radius: 16px;
+  background:
+    radial-gradient(ellipse at 50% 37%, #24383b 0, #1a292f 33%, #17242b 71%);
+  box-shadow: 0 22px 65px #03080c44, inset 0 1px #ffffff08;
+}
+
+.clock-meta {
+  position: absolute;
+  z-index: 2;
+  display: grid;
+  gap: 4px;
+}
+
+.clock-meta-year {
+  top: 29px;
+  left: 32px;
+}
+
+.clock-meta-month {
+  right: 32px;
+  bottom: 28px;
+  text-align: right;
+}
+
+.meta-label {
+  color: #819091;
+  font-size: 0.53rem;
+}
+
+.clock-meta strong {
+  color: #dce5df;
+  font-family: Manrope, sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.clock-face {
+  position: relative;
+  width: min(310px, 67vw);
+  aspect-ratio: 1;
+  margin-top: 26px;
+  border: 1px solid #49615e;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle, #203237 0 45%, #19282d 45.5% 73%, #273b3b 73.5% 74%, #17262b 74.5%);
+  box-shadow:
+    0 0 0 8px #152329,
+    0 0 0 9px #314441,
+    0 0 45px #07101299,
+    inset 0 0 30px #07111480;
+}
+
+.face-glow {
+  position: absolute;
+  inset: 17%;
+  border-radius: 50%;
+  background: radial-gradient(circle, #9fceb90c, transparent 68%);
+}
+
+.tick {
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  left: calc(50% - 0.5px);
+  width: 1px;
+  height: 9px;
+  transform: rotate(var(--tick-angle));
+  transform-origin: 50% 155px;
+  background: #607772;
+  opacity: 0.66;
+}
+
+.tick-major {
+  width: 2px;
+  height: 13px;
+  left: calc(50% - 1px);
+  background: #bad0c4;
+  opacity: 0.9;
+  transform-origin: 50% 155px;
+}
+
+.compass-label {
+  position: absolute;
+  z-index: 2;
+  color: #c0d2c8;
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  font-weight: 500;
+}
+
+.compass-north {
+  top: 24px;
+  left: 50%;
+  color: #a3d0b7;
+  transform: translateX(-50%);
+}
+
+.compass-east {
+  top: 50%;
+  right: 24px;
+  transform: translateY(-50%);
+}
+
+.compass-south {
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.compass-west {
+  top: 50%;
+  left: 24px;
+  transform: translateY(-50%);
+}
+
+.dial-date {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: grid;
+  width: 35px;
+  height: 35px;
+  place-items: center;
+  transform: translate(-50%, -50%);
+  border: 1px solid #587368;
+  border-radius: 50%;
+  background: #1c2b30;
+  color: #c3d6ca;
+  font-family: var(--mono);
+  font-size: 0.63rem;
+}
+
+.clock-hand {
+  position: absolute;
+  z-index: 3;
+  bottom: 50%;
+  left: calc(50% - 1px);
+  display: block;
+  width: 2px;
+  transform: rotate(var(--hand-angle));
+  transform-origin: 50% 100%;
+  border-radius: 2px;
+}
+
+.hour-hand {
+  height: 71px;
+  width: 4px;
+  left: calc(50% - 2px);
+  background: #e4ede3;
+}
+
+.minute-hand {
+  height: 103px;
+  background: #9ccbb3;
+}
+
+.second-hand {
+  z-index: 4;
+  height: 119px;
+  width: 1px;
+  left: 50%;
+  background: #d8917b;
+}
+
+.clock-pin {
+  position: absolute;
+  z-index: 5;
+  top: 50%;
+  left: 50%;
+  width: 9px;
+  height: 9px;
+  transform: translate(-50%, -50%);
+  border: 2px solid #1b2a2f;
+  border-radius: 50%;
+  background: #e0b18a;
+}
+
+.face-caption {
+  position: absolute;
+  bottom: 53px;
+  left: 50%;
+  color: #849995;
+  font-size: 0.43rem;
+  white-space: nowrap;
+  transform: translateX(-50%);
+}
+
+.weekday-marker {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 28px;
+  color: #9fceb9;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+}
+
+.marker-line {
+  width: 25px;
+  height: 1px;
+  background: #4e6a60;
+}
+
+.digital-time {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  margin-top: 15px;
+}
+
+.digital-time span {
+  color: #edf3eb;
+  font-family: var(--mono);
+  font-size: clamp(1.8rem, 4vw, 2.3rem);
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  font-variant-numeric: tabular-nums;
+}
+
+.digital-time i {
+  color: #879895;
+  font-size: 0.5rem;
+  font-style: normal;
+}
+
+.linear-date {
+  margin: 6px 0 25px;
+  color: #9baaa5;
+  font-size: 0.77rem;
+  letter-spacing: 0.035em;
+}
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  padding: 20px 2px 25px;
+  color: #79878a;
+  font-size: 0.52rem;
+}
+
+@media (max-width: 560px) {
+  .page-shell {
+    width: calc(100% - 26px);
+  }
+
+  .topbar {
+    height: 66px;
+  }
+
+  .brand {
+    gap: 7px;
+    font-size: 0.58rem;
+  }
+
+  .live-indicator {
+    font-size: 0.5rem;
+  }
+
+  .intro {
+    padding-top: 28px;
+  }
+
+  .clock-card {
+    min-height: 525px;
+  }
+
+  .clock-meta-year {
+    top: 23px;
+    left: 20px;
+  }
+
+  .clock-meta-month {
+    right: 20px;
+    bottom: 20px;
+  }
+
+  .clock-face {
+    margin-top: 38px;
+  }
+
+  .tick {
+    transform-origin: 50% calc(min(310px, 67vw) / 2);
+  }
+
+  .tick-major {
+    transform-origin: 50% calc(min(310px, 67vw) / 2);
+  }
+
+  .weekday-marker {
+    margin-top: 24px;
+  }
+
+  .footer {
+    gap: 10px;
+    font-size: 0.45rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+  }
+}
