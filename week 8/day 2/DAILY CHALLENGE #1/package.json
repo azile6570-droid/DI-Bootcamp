@@ -1,0 +1,22 @@
+{
+  "name": "week-8-day-2-daily-challenge-1",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "npm run build && concurrently -k -n server,client \"npm:dev:server\" \"npm:dev:client\"",
+    "dev:server": "node server/server.js",
+    "dev:client": "vite preview --config client/vite.config.js --host 127.0.0.1",
+    "build": "vite build --config client/vite.config.js"
+  },
+  "dependencies": {
+    "express": "^5.1.0",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^5.2.0",
+    "concurrently": "^9.2.1",
+    "vite": "^7.3.6"
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "name": "week-8-day-2-exercise-xp-ninja",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "concurrently -k -n client,users-api,customers-api \"npm:dev:client\" \"npm:dev:users-api\" \"npm:dev:customers-api\"",
+    "dev:client": "vite --host 127.0.0.1",
+    "dev:users-api": "node server/users-server.js",
+    "dev:customers-api": "node server/customers-server.js",
+    "build": "vite build"
+  },
+  "dependencies": {
+    "express": "^5.1.0",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^5.2.0",
+    "concurrently": "^9.2.1",
+    "vite": "^7.3.6"
+  }
+}
