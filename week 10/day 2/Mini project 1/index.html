@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#f6f4ee" />
+    <meta name="description" content="Save your favorite recipes and keep your kitchen inspiration close." />
+    <title>Gather | Your Recipe Book</title>
+  </head>
+  <body>
+    <main class="recipe-app">
+      <header class="site-header">
+        <a class="brand" href="#home" aria-label="Gather recipe book home">
+          <span class="brand-mark" aria-hidden="true">g.</span>
+          <span>gather<span class="brand-period">.</span></span>
+        </a>
+        <span class="header-note">GOOD FOOD, KEPT CLOSE</span>
+      </header>
+
+      <section class="hero" id="home" aria-labelledby="page-title">
+        <div>
+          <p class="eyebrow"><span aria-hidden="true">✳</span> YOUR LITTLE KITCHEN JOURNAL</p>
+          <h1 id="page-title">A pinch of this.<br /><em>A little bit of home.</em></h1>
+          <p class="hero-copy">Keep the recipes you love, the ones handed down, and the ones you can’t wait to make again.</p>
+        </div>
+        <div class="hero-illustration" aria-hidden="true">
+          <span class="illustration-sun">✳</span>
+          <span class="illustration-bowl"><i /><i /><i /></span>
+          <span class="illustration-leaf leaf-one">⌁</span>
+          <span class="illustration-leaf leaf-two">⌁</span>
+        </div>
+      </section>
+
+      <p class="app-message" id="appMessage" role="status" aria-live="polite"></p>
+
+      <div class="content-grid">
+        <section class="entry-panel" aria-labelledby="form-title">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">SOMETHING DELICIOUS</p>
+              <h2 id="form-title">Add a recipe</h2>
+            </div>
+            <span class="heading-flower" aria-hidden="true">✳</span>
+          </div>
+
+          <form id="recipeEntryForm">
+            <label for="recipeTitle">Recipe name</label>
+            <input type="text" id="recipeTitle" name="recipeTitle" placeholder="Sunday tomato soup" maxlength="100" required />
+
+            <label for="ingredients">Ingredients <span class="label-hint">ONE PER LINE</span></label>
+            <textarea id="ingredients" name="ingredients" placeholder="Ripe tomatoes&#10;A glug of olive oil&#10;A pinch of flaky salt" rows="5" required></textarea>
+
+            <label for="instructions">How to make it</label>
+            <textarea id="instructions" name="instructions" placeholder="Tell the story, one step at a time..." rows="5" required></textarea>
+
+            <button class="primary-button" type="submit"><span aria-hidden="true">＋</span> Save this recipe</button>
+          </form>
+          <p class="form-footnote"><span aria-hidden="true">↳</span> The best recipes are meant to be shared.</p>
+        </section>
+
+        <section class="collection-panel" aria-labelledby="collection-title">
+          <div class="collection-heading">
+            <div>
+              <p class="eyebrow">FRESH FROM YOUR KITCHEN</p>
+              <h2 id="collection-title">Your recipe book</h2>
+            </div>
+            <span class="recipe-count" id="recipeCount" aria-live="polite">0 RECIPES</span>
+          </div>
+          <div class="recipe-list" id="recipeContainer" aria-live="polite"></div>
+          <button class="clear-button" id="clearRecipesButton" type="button">
+            <span aria-hidden="true">⌫</span> Clear all recipes
+          </button>
+        </section>
+      </div>
+
+      <footer class="site-footer">
+        <span>MADE WITH A LITTLE EXTRA LOVE</span>
+        <span>YOUR RECIPES, YOUR TABLE</span>
+      </footer>
+    </main>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
