@@ -1,0 +1,40 @@
+<%- include('../partials/head', { title: 'Search' }) %>
+<%- include('../partials/header') %>
+<main class="container py-4">
+  <h1 class="display-6">Search facts</h1>
+  <div class="row g-4 mt-1">
+    <div class="col-md-6">
+      <form action="/search/title" method="post" class="card card-body h-100">
+        <label for="title" class="form-label">Search by title</label>
+        <input
+          id="title"
+          name="title"
+          class="form-control mb-3"
+          list="fact-titles"
+          placeholder="Choose or enter a title"
+          required
+        >
+        <datalist id="fact-titles">
+          <% titles.forEach((title) => { %>
+            <option value="<%= title %>"></option>
+          <% }); %>
+        </datalist>
+        <button type="submit" class="btn btn-primary">Search title</button>
+      </form>
+    </div>
+    <div class="col-md-6">
+      <form action="/search/category" method="post" class="card card-body h-100">
+        <label for="category" class="form-label">Search by category</label>
+        <select id="category" name="category" class="form-select mb-3" required>
+          <option value="">Choose a category</option>
+          <% categories.forEach((category) => { %>
+            <option value="<%= category %>"><%= category %></option>
+          <% }); %>
+        </select>
+        <button type="submit" class="btn btn-primary">Search category</button>
+      </form>
+    </div>
+  </div>
+  <%- include('../partials/posts', { posts, message }) %>
+</main>
+<%- include('../partials/footer') %>
